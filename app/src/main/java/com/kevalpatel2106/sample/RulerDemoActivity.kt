@@ -38,7 +38,7 @@ class RulerDemoActivity : AppCompatActivity() {
         val valueTv = findViewById<TextView>(R.id.selected_ruler_value_tv)
         val valuePicker = findViewById<ScrollingValuePicker>(R.id.ruler_view_demo)
 
-        valuePicker.setMinMaxValue(125F, 350F)
+        valuePicker.setMinMaxValue(125, 350)
         valuePicker.viewMultipleSize = 10F
         valuePicker.setOnScrollChangedListener(object : ObservableHorizontalScrollView.OnScrollChangedListener {
             override fun onScrollChanged(view: ObservableHorizontalScrollView?, l: Int, t: Int) {

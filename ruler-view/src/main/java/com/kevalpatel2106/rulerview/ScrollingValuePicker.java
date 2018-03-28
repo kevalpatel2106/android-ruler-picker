@@ -79,22 +79,8 @@ public class ScrollingValuePicker extends FrameLayout {
         mHorizontalScrollView.setOnScrollChangedListener(onScrollChangedListener);
     }
 
-    public void setMinMaxValue(float minValue, float maxValue) {
-        setMinMaxValue(minValue, maxValue, 1);
-    }
-
-    public void setMinMaxValue(float minValue, float maxValue, @SuppressWarnings("SameParameterValue") int valueMultiple) {
-        this.minValue = minValue;
-        this.maxValue = maxValue;
-        this.valueMultiple = valueMultiple;
-        mRulerView.setMaxValue(this.maxValue);
-        mRulerView.setMinValue(this.minValue);
-        mRulerView.setValueMultiple(this.valueMultiple);
-    }
-
-    public void setValueTypeMultiple(int valueTypeMultiple) {
-        this.valueMultiple = valueTypeMultiple;
-        mRulerView.setMultipleTypeValue(valueTypeMultiple);
+    public void setMinMaxValue(int minValue, int maxValue) {
+        mRulerView.setValueRange(minValue, maxValue);
     }
 
     public float getViewMultipleSize() {

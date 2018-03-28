@@ -32,27 +32,38 @@ import android.view.View;
  */
 
 public class RulerView extends View {
+    //TODO remove
     private final float PX_14SP;
 
-    public static final int DISPLAY_NUMBER_TYPE_SPACIAL_COUNT = 1;
     public static final int DISPLAY_NUMBER_TYPE_MULTIPLE = 2;
+    private final int longHeightRatio = 6;
+    private final int shortHeightRatio = 4;
+    /**
+     * Width of the view. This view height is measured in {@link #onMeasure(int, int)}.
+     *
+     * @see #onMeasure(int, int)
+     */
+    private int mViewWidth;
+    /**
+     * Height of the view. This view height is measured in {@link #onMeasure(int, int)}.
+     *
+     * @see #onMeasure(int, int)
+     */
+    private int mViewHeight;
+    /**
+     * {@link Paint} for the line in the ruler view.
+     */
     private Paint mLinePaint;
+    /**
+     * {@link Paint} to display the text on the ruler view.
+     */
     private Paint mTextPaint;
-    private float MAX_DATA = 100;
-    private float MIN_DATA = 0;
-    @SuppressWarnings("FieldCanBeLocal")
-    private int viewHeight = 0;
-    @SuppressWarnings("FieldCanBeLocal")
-    private int viewWidth = 0;
-    private int valueMultiple = 1;
-    private int displayNumberType = 1;
-    private int valueTypeMultiple = 5;
-    @SuppressWarnings("FieldCanBeLocal")
-    private int longHeightRatio = 10;
-    @SuppressWarnings("FieldCanBeLocal")
-    private int shortHeightRatio = 5;
-    @SuppressWarnings("FieldCanBeLocal")
-    private int baseHeightRatio = 3;
+    /**
+     * Distance interval between two subsequent dash on the ruler.
+     */
+    private int mDashInterval = 14 /* Default dash interval */;
+    private int mMinValue = 0 /* Default minimum value */;
+    private int mMaxValue = 100 /* Default maximum value */;
 
 
     public RulerView(@NonNull final Context context) {
@@ -97,7 +108,7 @@ public class RulerView extends View {
     private void init() {
         mLinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mLinePaint.setColor(Color.WHITE);   //TODO make it dynamic
-        mLinePaint.setStrokeWidth(5f);      //TODO make it dynamic
+        mLinePaint.setStrokeWidth(4f);      //TODO make it dynamic
         mLinePaint.setStyle(Paint.Style.STROKE);
 
         mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -109,71 +120,77 @@ public class RulerView extends View {
     /**
      * Set the maximum value to display on the ruler.
      *
-     * @param maxValue Value to display at the right end of the ruler. This can be positive, negative or
-     *                 zero.
+     * @param minValue Value to display at the left end of the ruler. This can be positive, negative
+     *                 or zero.
+     * @param maxValue Value to display at the right end of the ruler. This can be positive, negative
+     *                 or zero.This value must be greater than min value.
      */
-    public void setMaxValue(final float maxValue) {
-        this.MAX_DATA = maxValue;
+    public void setValueRange(final int minValue, final int maxValue) {
+        mMinValue = minValue;
+        mMaxValue = maxValue;
         invalidate();
     }
 
-    /**
-     * Set the minimum value to display on the ruler.
-     *
-     * @param minValue Value to display at the left end of the ruler. This can be positive, negative or
-     *                 zero.
-     */
-    public void setMinValue(final float minValue) {
-        this.MIN_DATA = minValue;
-        invalidate();
-    }
-
-    public void setValueMultiple(final int valueMultiple) {
-        this.valueMultiple = valueMultiple;
-        invalidate();
-    }
-
-    public void setMultipleTypeValue(final int valueTypeMultiple) {
-        this.displayNumberType = DISPLAY_NUMBER_TYPE_MULTIPLE;
-        this.valueTypeMultiple = valueTypeMultiple;
+    public void setDashInterval(final int dashIntervalPx) {
+        mDashInterval = dashIntervalPx;
         invalidate();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        viewHeight = getMeasuredHeight();
-        viewWidth = getMeasuredWidth();
+        //Draw the first dash
+        drawSmallDash(canvas, 0);
 
-        float viewInterval = (float) viewWidth / (MAX_DATA - MIN_DATA);
+        //Iterate through all value
+        for (int value = 1; value < mMaxValue - mMinValue; value++) {
 
-
-        canvas.drawLine(0,
-                0,
-                0,
-                viewHeight / longHeightRatio * baseHeightRatio, mLinePaint);
-
-        for (int i = 1; i < (MAX_DATA - MIN_DATA); i++) {
-
-            if (displayNumberType == DISPLAY_NUMBER_TYPE_MULTIPLE) {
-
-                if (((int) (i + MIN_DATA) * valueMultiple) % valueTypeMultiple == 0) {
-                    canvas.drawLine(viewInterval * i, 0, viewInterval * i, viewHeight / shortHeightRatio * baseHeightRatio, mLinePaint);
-                    canvas.drawText("" + ((int) (i + MIN_DATA) * valueMultiple), viewInterval * i, viewHeight / shortHeightRatio * baseHeightRatio + PX_14SP, mTextPaint);
-                } else {
-                    canvas.drawLine(viewInterval * i, 0, viewInterval * i, viewHeight / longHeightRatio * baseHeightRatio, mLinePaint);
-                }
-
+            if (value % 5 == 0) {
+                drawLongDash(canvas, value);
+                drawDashText(canvas, value);
             } else {
-                if (i % 5 == 0) {
-                    canvas.drawLine(viewInterval * i, 0, viewInterval * i, viewHeight / shortHeightRatio * baseHeightRatio, mLinePaint);
-                    canvas.drawText("" + ((int) (i + MIN_DATA) * valueMultiple), viewInterval * i, viewHeight / shortHeightRatio * baseHeightRatio + PX_14SP, mTextPaint);
-                } else {
-                    canvas.drawLine(viewInterval * i, 0, viewInterval * i, viewHeight / longHeightRatio * baseHeightRatio, mLinePaint);
-                }
+                drawSmallDash(canvas, value);
             }
         }
-        canvas.drawLine(viewWidth, 0, viewWidth, viewHeight / longHeightRatio * baseHeightRatio, mLinePaint);
+
+        //Draw the last dash.
+        drawSmallDash(canvas, mViewWidth);
         super.onDraw(canvas);
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        //Measure dimensions
+        mViewHeight = MeasureSpec.getSize(heightMeasureSpec);
+        mViewWidth = MeasureSpec.getSize(widthMeasureSpec);
+
+        this.setMeasuredDimension(mViewWidth, mViewHeight);
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
+
+    private void drawSmallDash(@NonNull final Canvas canvas,
+                               final int value) {
+        canvas.drawLine(mDashInterval * value,
+                0,
+                mDashInterval * value,
+                mViewHeight / longHeightRatio,
+                mLinePaint);
+    }
+
+    private void drawLongDash(@NonNull final Canvas canvas,
+                              final int value) {
+        canvas.drawLine(mDashInterval * value,
+                0,
+                mDashInterval * value,
+                mViewHeight / shortHeightRatio,
+                mLinePaint);
+    }
+
+    private void drawDashText(@NonNull final Canvas canvas,
+                              final int value) {
+        canvas.drawText(String.valueOf((value + mMinValue)),
+                mDashInterval * value,
+                mViewHeight / shortHeightRatio + PX_14SP,
+                mTextPaint);
     }
 }
 
