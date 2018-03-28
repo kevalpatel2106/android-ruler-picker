@@ -63,16 +63,19 @@ public class ObservableHorizontalScrollView extends HorizontalScrollView {
     }
 
     private void init() {
-        scrollerTask = () -> {
-            int newPosition = getScrollX();
-            if (initialPosition - newPosition == 0) {//has stopped
+        scrollerTask = new Runnable() {
+            @Override
+            public void run() {
+                int newPosition = getScrollX();
+                if (initialPosition - newPosition == 0) {//has stopped
 
-                if (mOnScrollChangedListener != null) {
-                    mOnScrollChangedListener.onScrollStopped(getScrollX(), getScrollY());
+                    if (mOnScrollChangedListener != null) {
+                        mOnScrollChangedListener.onScrollStopped(getScrollX(), getScrollY());
+                    }
+                } else {
+                    initialPosition = getScrollX();
+                    ObservableHorizontalScrollView.this.postDelayed(scrollerTask, newCheck);
                 }
-            } else {
-                initialPosition = getScrollX();
-                ObservableHorizontalScrollView.this.postDelayed(scrollerTask, newCheck);
             }
         };
     }

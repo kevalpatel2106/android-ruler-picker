@@ -43,7 +43,7 @@ public class ScrollingValuePicker extends FrameLayout {
     private View mLeftSpacer;
     private View mRightSpacer;
 
-    private LineRulerView lineRulerView;
+    private RulerView mRulerView;
     private ObservableHorizontalScrollView mHorizontalScrollView;
     private float viewMultipleSize = 3f;
 
@@ -87,14 +87,14 @@ public class ScrollingValuePicker extends FrameLayout {
         this.minValue = minValue;
         this.maxValue = maxValue;
         this.valueMultiple = valueMultiple;
-        lineRulerView.setMaxValue(this.maxValue);
-        lineRulerView.setMinValue(this.minValue);
-        lineRulerView.setValueMultiple(this.valueMultiple);
+        mRulerView.setMaxValue(this.maxValue);
+        mRulerView.setMinValue(this.minValue);
+        mRulerView.setValueMultiple(this.valueMultiple);
     }
 
     public void setValueTypeMultiple(int valueTypeMultiple) {
         this.valueMultiple = valueTypeMultiple;
-        lineRulerView.setMultipleTypeValue(valueTypeMultiple);
+        mRulerView.setMultipleTypeValue(valueTypeMultiple);
     }
 
     public float getViewMultipleSize() {
@@ -133,8 +133,8 @@ public class ScrollingValuePicker extends FrameLayout {
         mLeftSpacer = new View(context);
         mRightSpacer = new View(context);
 
-        lineRulerView = new LineRulerView(context);
-        container.addView(lineRulerView);
+        mRulerView = new RulerView(context);
+        container.addView(mRulerView);
         container.addView(mLeftSpacer, 0);
         container.addView(mRightSpacer);
     }
@@ -145,11 +145,14 @@ public class ScrollingValuePicker extends FrameLayout {
         mHorizontalScrollView.setHorizontalScrollBarEnabled(false);
         addView(mHorizontalScrollView);
 
-        mHorizontalScrollView.setOnTouchListener((view, motionEvent) -> {
-            if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                mHorizontalScrollView.startScrollerTask();
+        mHorizontalScrollView.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    mHorizontalScrollView.startScrollerTask();
+                }
+                return false;
             }
-            return false;
         });
     }
 
@@ -174,10 +177,10 @@ public class ScrollingValuePicker extends FrameLayout {
             leftParams.width = width / 2;
             mLeftSpacer.setLayoutParams(leftParams);
 
-            final ViewGroup.LayoutParams rulerViewParams = lineRulerView.getLayoutParams();
+            final ViewGroup.LayoutParams rulerViewParams = mRulerView.getLayoutParams();
             rulerViewParams.width = (int) (width * viewMultipleSize);  // set RulerView Width
-            lineRulerView.setLayoutParams(rulerViewParams);
-            lineRulerView.invalidate();
+            mRulerView.setLayoutParams(rulerViewParams);
+            mRulerView.invalidate();
 
 
             final ViewGroup.LayoutParams rightParams = mRightSpacer.getLayoutParams();
@@ -231,12 +234,15 @@ public class ScrollingValuePicker extends FrameLayout {
     /**
      * Scroll the ruler to the given value.
      */
-    public synchronized void scrollToValue(float value) {
-        mHorizontalScrollView.postDelayed(() -> {
-            float oneValue = mHorizontalScrollView.getWidth() * viewMultipleSize / (maxValue - minValue);
-            float valueWidth = oneValue * (value - minValue);
+    public synchronized void scrollToValue(final float value) {
+        mHorizontalScrollView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                float oneValue = mHorizontalScrollView.getWidth() * viewMultipleSize / (maxValue - minValue);
+                float valueWidth = oneValue * (value - minValue);
 
-            mHorizontalScrollView.smoothScrollBy(Math.round(valueWidth), 0);
+                mHorizontalScrollView.smoothScrollBy(Math.round(valueWidth), 0);
+            }
         }, 400);
     }
 }
