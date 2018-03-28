@@ -15,7 +15,7 @@
  *
  */
 
-package com.kevalpatel2106.rulerview;
+package com.kevalpatel2106.rulerpicker;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -28,7 +28,7 @@ import android.widget.HorizontalScrollView;
  *
  * @see <a href="https://github.com/dwfox/DWRulerView>Original Repo</a>
  */
-public class ObservableHorizontalScrollView extends HorizontalScrollView {
+public final class ObservableHorizontalScrollView extends HorizontalScrollView {
 
     private Runnable scrollerTask;
     private int initialPosition;

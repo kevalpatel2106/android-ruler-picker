@@ -15,7 +15,7 @@
  *
  */
 
-package com.kevalpatel2106.rulerview;
+package com.kevalpatel2106.rulerpicker;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;

@@ -18,9 +18,9 @@ if (project.rootProject.file('local.properties').exists()) {
     version = "1.0"     // This is the library version used when deploying the artifact
 
     // Homepage URL of the library
-    def siteUrl = 'https://github.com/kevalpatel2106/android-ruler-view'
+    def siteUrl = 'https://github.com/kevalpatel2106/android-ruler-picker'
     // Git repository URL
-    def gitUrl = 'https://github.com/kevalpatel2106/android-ruler-view.git'
+    def gitUrl = 'https://github.com/kevalpatel2106/android-ruler-picker.git'
 
     group = "com.kevalpatel2106"    //Group id
 
@@ -32,7 +32,7 @@ if (project.rootProject.file('local.properties').exists()) {
                     packaging 'aar' //AAR format
 
                     // Add your description here
-                    name 'Android Rulerview'  //Name of the repo
+                    name 'android-ruler-picker'  //Name of the repo
                     description = ''
                     url siteUrl
 
@@ -93,7 +93,7 @@ if (project.rootProject.file('local.properties').exists()) {
             repo = "maven"
 
             // it is the name that appears in bintray when logged
-            name = "android-ruler-view"    //Name of the artifact [Group Id]:[name]:[version]
+            name = "android-ruler-picker"    //Name of the artifact [Group Id]:[name]:[version]
             websiteUrl = siteUrl
             vcsUrl = gitUrl
             licenses = ["Apache-2.0"]

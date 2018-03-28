@@ -19,7 +19,7 @@ android {
 }
 
 dependencies {
-    implementation project(':ruler-view')
+    implementation project(':ruler-picker')
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation 'com.android.support:appcompat-v7:27.1.0'
 }

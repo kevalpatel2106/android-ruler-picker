@@ -21,8 +21,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import android.widget.TextView
-import com.kevalpatel2106.rulerview.ObservableHorizontalScrollView
-import com.kevalpatel2106.rulerview.ScrollingValuePicker
+import com.kevalpatel2106.rulerpicker.ObservableHorizontalScrollView
+import com.kevalpatel2106.rulerpicker.ScrollingValuePicker
 
 /**
  * Created by Keval on 16/12/17.

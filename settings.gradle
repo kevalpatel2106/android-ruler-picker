@@ -1,1 +1,1 @@
-include ':app', ':ruler-view'
+include ':app', ':ruler-picker'
