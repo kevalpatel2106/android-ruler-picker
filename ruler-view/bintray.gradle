@@ -1,0 +1,110 @@
+/*
+ * Copyright 2017 Keval Patel
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance wit
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for
+ *  the specific language governing permissions and limitations under the License.
+ */
+
+//#################################### Bintray ####################################//
+if (project.rootProject.file('local.properties').exists()) {
+    apply plugin: 'com.jfrog.bintray'
+
+    version = "1.0"     // This is the library version used when deploying the artifact
+
+    // Homepage URL of the library
+    def siteUrl = 'https://github.com/kevalpatel2106/android-ruler-view'
+    // Git repository URL
+    def gitUrl = 'https://github.com/kevalpatel2106/android-ruler-view.git'
+
+    group = "com.kevalpatel2106"    //Group id
+
+    install {
+
+        repositories.mavenInstaller {
+            pom {
+                project {
+                    packaging 'aar' //AAR format
+
+                    // Add your description here
+                    name 'Android Rulerview'  //Name of the repo
+                    description = ''
+                    url siteUrl
+
+                    // Set your license
+                    licenses {
+                        license {
+                            name 'The Apache Software License, Version 2.0'
+                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id 'kevalpatel2106'     //Dev id
+                            name 'Keval Patel'      //Dev name
+                            email 'kevalpatel2106@gmail.com'    //Dev email
+                        }
+                    }
+                    scm {
+                        connection gitUrl
+                        developerConnection gitUrl
+                        url siteUrl
+                    }
+                }
+            }
+        }
+    }
+
+    task sourcesJar(type: Jar) {
+        from android.sourceSets.main.java.srcDirs
+        classifier = 'sources'
+    }
+
+    task javadoc(type: Javadoc) {
+        source = android.sourceSets.main.java.srcDirs
+        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    }
+
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+        classifier = 'javadoc'
+        from javadoc.destinationDir
+    }
+
+    artifacts {
+        archives sourcesJar
+    }
+
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+    // https://github.com/bintray/gradle-bintray-plugin
+    bintray {
+        user = properties.getProperty("bintray.user")
+        key = properties.getProperty("bintray.apikey")
+
+        configurations = ['archives']
+
+        pkg {
+            repo = "maven"
+
+            // it is the name that appears in bintray when logged
+            name = "android-ruler-view"    //Name of the artifact [Group Id]:[name]:[version]
+            websiteUrl = siteUrl
+            vcsUrl = gitUrl
+            licenses = ["Apache-2.0"]
+            publish = true
+            version {
+                gpg {
+                    sign = false
+                    //Determines whether to GPG sign the files. The default is false
+                    //passphrase = properties.getProperty("bintray.gpg.password")   //Optional. The passphrase for GPG signing'
+                }
+            }
+        }
+    }
+}

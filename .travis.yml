@@ -1,0 +1,39 @@
+language: android
+jdk: oraclejdk8
+sudo: false
+
+env:
+    global:
+        - ADB_INSTALL_TIMEOUT=10    #Time out to 10 mins
+    
+before_cache:
+    - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+
+cache:
+  directories:      #Cache all dirs under .gradle folder
+    - $HOME/.gradle/daemon      #Cache daemon logs
+    - $HOME/.gradle/native      #Cache library downloaded from the gradle dependency
+    - $HOME/.gradle/wrapper     #Cache the gradle
+    
+android:
+    update_sdk: true
+    components:
+        - platform-tools
+        - tools
+        - build-tools-27.0.3
+        - android-27
+
+        # Additional components
+        - extra-google-m2repository
+        - extra-android-m2repository
+  
+licenses:
+    - 'android-sdk-preview-license-52d11cd2'
+    - 'android-sdk-license-.+'
+    - 'google-gdk-license-.+'
+    
+before_script:
+    - chmod +x gradlew      #Grand permissions
+
+script:
+    - ./gradlew assembleDebug -PdisablePreDex --stacktrace
