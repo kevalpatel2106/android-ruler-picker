@@ -265,11 +265,22 @@ public final class RulerValuePicker extends FrameLayout implements ObservableHor
      *              will be selected.
      */
     public void selectValue(final int value) {
-        mHorizontalScrollView.scrollToValue(value,
-                mRulerView.getIndicatorIntervalWidth(),
-                mRulerView.getMinValue());
+        post(new Runnable() {
+            @Override
+            public void run() {
+                int valuesToScroll = mRulerView.getMinValue();
+                if (value < mRulerView.getMinValue())
+                    valuesToScroll = value - mRulerView.getMinValue();
+
+                mHorizontalScrollView.smoothScrollBy(
+                        valuesToScroll * mRulerView.getIndicatorIntervalWidth(), 0);
+            }
+        });
     }
 
+    /**
+     * @return Get the current selected value.
+     */
     public int getCurrentValue() {
         int absoluteValue = mHorizontalScrollView.getScrollX() / mRulerView.getIndicatorIntervalWidth();
         int value = mRulerView.getMinValue() + absoluteValue;
@@ -285,14 +296,23 @@ public final class RulerValuePicker extends FrameLayout implements ObservableHor
 
     @Override
     public void onScrollChanged() {
-        if (mListener != null) mListener.onValueChanged(getCurrentValue());
+        if (mListener != null) mListener.onIntermediateValueChange(getCurrentValue());
     }
 
     @Override
     public void onScrollStopped() {
-        mHorizontalScrollView.makeOffsetCorrection(mRulerView.getIndicatorIntervalWidth());
+        makeOffsetCorrection(mRulerView.getIndicatorIntervalWidth());
         if (mListener != null) {
-            mListener.onScrollStopped();
+            mListener.onValueChange(getCurrentValue());
+        }
+    }
+
+    private void makeOffsetCorrection(final int indicatorInterval) {
+        int offsetValue = mHorizontalScrollView.getScrollX() % indicatorInterval;
+        if (offsetValue < indicatorInterval / 2) {
+            mHorizontalScrollView.scrollBy(-offsetValue, 0);
+        } else {
+            mHorizontalScrollView.scrollBy(indicatorInterval - offsetValue, 0);
         }
     }
 

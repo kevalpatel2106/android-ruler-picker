@@ -45,15 +45,12 @@ class RulerDemoActivity : AppCompatActivity() {
         valuePicker.selectValue(130)
 
         valuePicker.setValuePickerListener(object : RulerValuePickerListener {
-            var selectedValue = 0
-
-            override fun onScrollStopped() {
-                Toast.makeText(this@RulerDemoActivity, "User height is :$selectedValue cms", Toast.LENGTH_LONG).show()
-                valueTv.text = "Value: $selectedValue cms\nScroll stopped."
+            override fun onValueChange(value: Int) {
+                Toast.makeText(this@RulerDemoActivity, "User height is :$value cms", Toast.LENGTH_LONG).show()
+                valueTv.text = "Value: $value cms\nScroll stopped."
             }
 
-            override fun onValueChanged(selectedValue: Int) {
-                this.selectedValue = selectedValue
+            override fun onIntermediateValueChange(selectedValue: Int) {
                 valueTv.text = "Value: $selectedValue cms"
             }
 

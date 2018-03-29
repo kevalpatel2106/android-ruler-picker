@@ -41,6 +41,7 @@ final class ObservableHorizontalScrollView extends HorizontalScrollView {
                 mLastScrollUpdateMills = -1;
                 mScrollChangedListener.onScrollStopped();
             } else {
+                //Post next delay
                 postDelayed(this, NEW_CHECK_DURATION);
             }
         }
@@ -59,26 +60,6 @@ final class ObservableHorizontalScrollView extends HorizontalScrollView {
         mScrollChangedListener = listener;
     }
 
-    /**
-     * Scroll to the x portion for given value.
-     *
-     * @param value        Value to scroll. The value must be greater than min value. If the value is less than
-     *                     min value, scrollbar will scroll to the start.
-     * @param intervalSize Distance between two ruler indicator in pixels.
-     * @param minValue     Minimum value displayed on ruler view.
-     */
-    void scrollToValue(final int value, final int intervalSize, final int minValue) {
-        post(new Runnable() {
-            @Override
-            public void run() {
-                int valuesToScroll = minValue;
-                if (value < minValue) valuesToScroll = value - minValue;
-
-                smoothScrollBy(valuesToScroll * intervalSize, 0);
-            }
-        });
-    }
-
     @Override
     protected void onScrollChanged(final int horizontalOrigin,
                                    final int verticalOrigin,
@@ -92,21 +73,19 @@ final class ObservableHorizontalScrollView extends HorizontalScrollView {
         mLastScrollUpdateMills = System.currentTimeMillis();
     }
 
-    void makeOffsetCorrection(final int indicatorInterval) {
-        int offsetValue = getScrollX() % indicatorInterval;
-        System.out.println(offsetValue);
+    /**
+     * Listener to get callbacks on scrollview scroll events.
+     */
+    interface ScrollChangedListener {
 
-        if (offsetValue < indicatorInterval / 2) {
-            scrollBy(-offsetValue, 0);
-        } else {
-            scrollBy(indicatorInterval - offsetValue, 0);
-        }
-
-    }
-
-    public interface ScrollChangedListener {
+        /**
+         * Called upon change in scroll position.
+         */
         void onScrollChanged();
 
+        /**
+         * Called when the scrollview stops scrolling.
+         */
         void onScrollStopped();
     }
 }
