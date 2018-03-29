@@ -17,12 +17,11 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.view.MotionEvent;
-import android.view.View;
 import android.widget.HorizontalScrollView;
 
 /**
  * Created by Kevalpatel2106 on 29-Mar-2018.
+ * A {@link HorizontalScrollView} which has ability to detect start/stop scrolling.
  *
  * @see <a href="https://github.com/dwfox/DWRulerView>Original Repo</a>
  */
@@ -30,47 +29,44 @@ import android.widget.HorizontalScrollView;
 final class ObservableHorizontalScrollView extends HorizontalScrollView {
     private static final long NEW_CHECK_DURATION = 100L;
 
-    private int mInitialPosition;
-
-    private Runnable mScrollerTask = new Runnable() {
-
-        public void run() {
-            if (mScrollChangedListener == null) return;
-
-            int newPosition = getScrollY();
-            if (mInitialPosition - newPosition == 0) {
-
-                //Has stopped
-                mScrollChangedListener.onScrollStopped();
-            } else {
-
-                mInitialPosition = getScrollY();
-                postDelayed(mScrollerTask, NEW_CHECK_DURATION);
-            }
-        }
-    };
+    private long mLastScrollUpdateMills = -1;
 
     @Nullable
     private ScrollChangedListener mScrollChangedListener;
 
+    private Runnable mScrollerTask = new Runnable() {
+
+        public void run() {
+            if (System.currentTimeMillis() - mLastScrollUpdateMills > NEW_CHECK_DURATION) {
+                mLastScrollUpdateMills = -1;
+                mScrollChangedListener.onScrollStopped();
+            } else {
+                postDelayed(this, NEW_CHECK_DURATION);
+            }
+        }
+    };
+
+    /**
+     * Constructor.
+     *
+     * @param context  {@link Context} of caller.
+     * @param listener {@link ScrollChangedListener} to get callbacks when scroll starts or stops.
+     * @see ScrollChangedListener
+     */
     public ObservableHorizontalScrollView(@NonNull final Context context,
                                           @NonNull final ScrollChangedListener listener) {
         super(context);
         mScrollChangedListener = listener;
-
-        setOnTouchListener(new OnTouchListener() {
-            @SuppressLint("ClickableViewAccessibility")
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    mInitialPosition = getScrollY();
-                    postDelayed(mScrollerTask, NEW_CHECK_DURATION);
-                }
-                return false;
-            }
-        });
     }
 
+    /**
+     * Scroll to the x portion for given value.
+     *
+     * @param value        Value to scroll. The value must be greater than min value. If the value is less than
+     *                     min value, scrollbar will scroll to the start.
+     * @param intervalSize Distance between two ruler indicator in pixels.
+     * @param minValue     Minimum value displayed on ruler view.
+     */
     void scrollToValue(final int value, final int intervalSize, final int minValue) {
         post(new Runnable() {
             @Override
@@ -91,9 +87,12 @@ final class ObservableHorizontalScrollView extends HorizontalScrollView {
         super.onScrollChanged(horizontalOrigin, verticalOrigin, oldHorizontalOrigin, oldVerticalOrigin);
         if (mScrollChangedListener == null) return;
         mScrollChangedListener.onScrollChanged();
+
+        if (mLastScrollUpdateMills == -1) postDelayed(mScrollerTask, NEW_CHECK_DURATION);
+        mLastScrollUpdateMills = System.currentTimeMillis();
     }
 
-    void makeOffsetCorrection(int indicatorInterval) {
+    void makeOffsetCorrection(final int indicatorInterval) {
         int offsetValue = getScrollX() % indicatorInterval;
         System.out.println(offsetValue);
 
