@@ -13,12 +13,12 @@
 
 package com.kevalpatel2106.rulerpicker;
 
-import android.annotation.TargetApi;
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.AttributeSet;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.HorizontalScrollView;
 
 /**
@@ -26,61 +26,61 @@ import android.widget.HorizontalScrollView;
  *
  * @see <a href="https://github.com/dwfox/DWRulerView>Original Repo</a>
  */
-public final class ObservableHorizontalScrollView extends HorizontalScrollView {
+@SuppressLint("ViewConstructor")
+final class ObservableHorizontalScrollView extends HorizontalScrollView {
+    private static final long NEW_CHECK_DURATION = 100L;
 
-    private Runnable scrollerTask;
+    private int mInitialPosition;
 
-    private int initialPosition;
+    private Runnable mScrollerTask = new Runnable() {
 
-    private int newCheck = 100;
+        public void run() {
+            if (mScrollChangedListener == null) return;
+
+            int newPosition = getScrollY();
+            if (mInitialPosition - newPosition == 0) {
+
+                //Has stopped
+                mScrollChangedListener.onScrollStopped();
+            } else {
+
+                mInitialPosition = getScrollY();
+                postDelayed(mScrollerTask, NEW_CHECK_DURATION);
+            }
+        }
+    };
 
     @Nullable
     private ScrollChangedListener mScrollChangedListener;
 
-
-    public ObservableHorizontalScrollView(@NonNull final Context context) {
+    public ObservableHorizontalScrollView(@NonNull final Context context,
+                                          @NonNull final ScrollChangedListener listener) {
         super(context);
-        init();
+        mScrollChangedListener = listener;
+
+        setOnTouchListener(new OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    mInitialPosition = getScrollY();
+                    postDelayed(mScrollerTask, NEW_CHECK_DURATION);
+                }
+                return false;
+            }
+        });
     }
 
-    public ObservableHorizontalScrollView(@NonNull final Context context,
-                                          @Nullable final AttributeSet attrs) {
-        super(context, attrs);
-        init();
-    }
-
-    public ObservableHorizontalScrollView(@NonNull final Context context,
-                                          @Nullable final AttributeSet attrs,
-                                          final int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        init();
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public ObservableHorizontalScrollView(@NonNull final Context context,
-                                          @Nullable final AttributeSet attrs,
-                                          final int defStyleAttr,
-                                          final int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        init();
-    }
-
-    private void init() {
-        scrollerTask = new Runnable() {
+    void scrollToValue(final int value, final int intervalSize, final int minValue) {
+        post(new Runnable() {
             @Override
             public void run() {
-                int newPosition = getScrollX();
-                if (initialPosition - newPosition == 0) {//has stopped
+                int valuesToScroll = minValue;
+                if (value < minValue) valuesToScroll = value - minValue;
 
-                    if (mScrollChangedListener != null) {
-                        mScrollChangedListener.onScrollStopped(getScrollX(), getScrollY());
-                    }
-                } else {
-                    initialPosition = getScrollX();
-                    ObservableHorizontalScrollView.this.postDelayed(scrollerTask, newCheck);
-                }
+                smoothScrollBy(valuesToScroll * intervalSize, 0);
             }
-        };
+        });
     }
 
     @Override
@@ -89,18 +89,26 @@ public final class ObservableHorizontalScrollView extends HorizontalScrollView {
                                    final int oldHorizontalOrigin,
                                    final int oldVerticalOrigin) {
         super.onScrollChanged(horizontalOrigin, verticalOrigin, oldHorizontalOrigin, oldVerticalOrigin);
-        if (mScrollChangedListener != null) {
-            mScrollChangedListener.onScrollChanged(this, horizontalOrigin, verticalOrigin);
+        if (mScrollChangedListener == null) return;
+        mScrollChangedListener.onScrollChanged();
+    }
+
+    void makeOffsetCorrection(int indicatorInterval) {
+        int offsetValue = getScrollX() % indicatorInterval;
+        System.out.println(offsetValue);
+
+        if (offsetValue < indicatorInterval / 2) {
+            scrollBy(-offsetValue, 0);
+        } else {
+            scrollBy(indicatorInterval - offsetValue, 0);
         }
+
     }
 
-    public void startScrollerTask() {
-        initialPosition = getScrollX();
-        ObservableHorizontalScrollView.this.postDelayed(scrollerTask, newCheck);
-    }
+    public interface ScrollChangedListener {
+        void onScrollChanged();
 
-    public void setScrollChangedListener(@NonNull final ScrollChangedListener listener) {
-        mScrollChangedListener = listener;
+        void onScrollStopped();
     }
 }
 

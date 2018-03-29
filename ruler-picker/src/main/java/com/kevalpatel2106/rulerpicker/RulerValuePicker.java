@@ -13,7 +13,6 @@
 
 package com.kevalpatel2106.rulerpicker;
 
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -21,10 +20,14 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.os.Build;
+import android.support.annotation.CheckResult;
+import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
+import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -33,8 +36,8 @@ import android.widget.LinearLayout;
 
 /**
  * Created by Kevalpatel2106 on 29-Mar-2018.
- *
- *  <li>Diagram:</li>
+ * <p>
+ * <li>Diagram:</li>
  * Observable ScrollView
  * |------------------|---------------------\--/----------------------|------------------|<br/>
  * |                  |                      \/                       |                  |<br/>
@@ -43,10 +46,10 @@ import android.widget.LinearLayout;
  * |                  |                                               |                  |<br/>
  * |                  |                                               |                  |<br/>
  * |------------------|-----------------------------------------------|------------------|<br/>
-
+ *
  * @see <a href="https://github.com/dwfox/DWRulerView>Original Repo</a>
  */
-public class RulerValuePicker extends FrameLayout {
+public final class RulerValuePicker extends FrameLayout implements ObservableHorizontalScrollView.ScrollChangedListener {
 
     /**
      * Left side empty view to add padding to the ruler.
@@ -61,6 +64,8 @@ public class RulerValuePicker extends FrameLayout {
      * |                  |                                               |                  |<br/>
      * |------------------|-----------------------------------------------|------------------|<br/>
      */
+    @SuppressWarnings("NullableProblems")
+    @NonNull
     private View mLeftSpacer;
 
     /**
@@ -76,6 +81,8 @@ public class RulerValuePicker extends FrameLayout {
      * |                  |                                               |                  |<br/>
      * |------------------|-----------------------------------------------|------------------|<br/>
      */
+    @SuppressWarnings("NullableProblems")
+    @NonNull
     private View mRightSpacer;
 
     /**
@@ -91,6 +98,8 @@ public class RulerValuePicker extends FrameLayout {
      * |                  |                                               |                  |<br/>
      * |------------------|-----------------------------------------------|------------------|<br/>
      */
+    @SuppressWarnings("NullableProblems")
+    @NonNull
     private RulerView mRulerView;
 
     /**
@@ -100,26 +109,43 @@ public class RulerValuePicker extends FrameLayout {
      * @see #mRightSpacer
      * @see #mRulerView
      */
+    @SuppressWarnings("NullableProblems")
+    @NonNull
     private ObservableHorizontalScrollView mHorizontalScrollView;
-    private float viewMultipleSize = 3f;
 
-    private float maxValue = 0;
-    private float minValue = 0;
+    @Nullable
+    private RulerValuePickerListener mListener;
 
+    @SuppressWarnings("NullableProblems")
+    @NonNull
     private Paint mNotchPaint;
+
+    @SuppressWarnings("NullableProblems")
+    @NonNull
     private Path mNotchPath;
 
+    private int mNotchColor = Color.WHITE;
+
+    /**
+     * Public constructor.
+     */
     public RulerValuePicker(@NonNull final Context context) {
         super(context);
         init();
     }
 
+    /**
+     * Public constructor.
+     */
     public RulerValuePicker(@NonNull final Context context,
                             @Nullable final AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
+    /**
+     * Public constructor.
+     */
     public RulerValuePicker(@NonNull final Context context,
                             @Nullable final AttributeSet attrs,
                             final int defStyleAttr) {
@@ -127,6 +153,9 @@ public class RulerValuePicker extends FrameLayout {
         init();
     }
 
+    /**
+     * Public constructor.
+     */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public RulerValuePicker(@NonNull final Context context,
                             @Nullable final AttributeSet attrs,
@@ -136,60 +165,30 @@ public class RulerValuePicker extends FrameLayout {
         init();
     }
 
-    public void setOnScrollChangedListener(final ScrollChangedListener onScrollChangedListener) {
-        mHorizontalScrollView.setScrollChangedListener(onScrollChangedListener);
-    }
-
-    public void setMinMaxValue(int minValue, int maxValue) {
-        mRulerView.setValueRange(minValue, maxValue);
-    }
-
     private void init() {
-        //Create the horizontal scrollbar
-        addScrollbar();
-
-        //Create the linear layout and add it to the horizontal view.
-        addRuler();
+        //Add all the children
+        addChildViews();
 
         //Prepare the notch color.
         mNotchPaint = new Paint();
-        mNotchPaint.setColor(Color.WHITE);      //TODO make dynamic
-        mNotchPaint.setStrokeWidth(5f);         //TODO make dynamic
-        mNotchPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        prepareNotchPaint();
 
         mNotchPath = new Path();
     }
 
-    private void calculateNotchPath() {
-        mNotchPath.moveTo(getWidth() / 2 - 30, 0);
-        mNotchPath.lineTo(getWidth() / 2, 40);
-        mNotchPath.lineTo(getWidth() / 2 + 30, 0);
+    /**
+     * Create the paint for notch. This will
+     */
+    private void prepareNotchPaint() {
+        mNotchPaint.setColor(mNotchColor);
+        mNotchPaint.setStrokeWidth(5f);
+        mNotchPaint.setStyle(Paint.Style.FILL_AND_STROKE);
     }
 
-
-    @SuppressLint("ClickableViewAccessibility")
-    private void addScrollbar() {
-        mHorizontalScrollView = new ObservableHorizontalScrollView(getContext());
+    private void addChildViews() {
+        mHorizontalScrollView = new ObservableHorizontalScrollView(getContext(), this);
         mHorizontalScrollView.setHorizontalScrollBarEnabled(false); //Don't display the scrollbar
 
-        addView(mHorizontalScrollView);
-
-        mHorizontalScrollView.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    mHorizontalScrollView.startScrollerTask();
-                }
-                return false;
-            }
-        });
-    }
-
-    /**
-     * You must have to call {@link #addScrollbar()} before this method to create {@link #mHorizontalScrollView}
-     * in which all these views will be added.
-     */
-    private void addRuler() {
         final LinearLayout rulerContainer = new LinearLayout(getContext());
 
         //Add left spacing to the container
@@ -205,22 +204,27 @@ public class RulerValuePicker extends FrameLayout {
         rulerContainer.addView(mRightSpacer);
 
         //Add this container to the scroll view.
+        mHorizontalScrollView.removeAllViews();
         mHorizontalScrollView.addView(rulerContainer);
+
+        //Add scroll view to this view.
+        removeAllViews();
+        addView(mHorizontalScrollView);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
 
         //Draw the top notch
         canvas.drawPath(mNotchPath, mNotchPaint);
-        super.onDraw(canvas);
     }
 
     @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        super.onLayout(changed, left, top, right, bottom);
+    protected void onLayout(boolean isChanged, int left, int top, int right, int bottom) {
+        super.onLayout(isChanged, left, top, right, bottom);
 
-        if (changed) {
+        if (isChanged) {
             final int width = getWidth();
 
             //Set width of the left spacer to the half of this view.
@@ -240,55 +244,327 @@ public class RulerValuePicker extends FrameLayout {
     }
 
     /**
-     * Get the currently selected value in the value picker.
+     * Calculate notch path. Notch will be in the triangle shape at the top-center of this view.
      *
-     * @return Current value without offset adjustment.
+     * @see #mNotchPath
      */
-    public int getCurrentValue(int l) {
-        float oneValue = (float) mHorizontalScrollView.getWidth() * viewMultipleSize / (maxValue - minValue);
-        int value = Math.round(l / oneValue) + (int) minValue;
+    private void calculateNotchPath() {
+        mNotchPath.reset();
 
-        if (value > maxValue) value = (int) maxValue;
-        else if (value < minValue) value = (int) minValue;
-
-        return value;
-    }
-
-    /**
-     * Get the currently selected value in the value picker and move that value to the center of
-     * the ruler and adjust offsets.
-     *
-     * @return value selected with offset adjustment. (This value will be whole integer always.)
-     */
-    public int getValueAndScrollItemToCenter(int l) {
-        float oneValue = (float) mHorizontalScrollView.getWidth() * viewMultipleSize / (maxValue - minValue);
-        int value = Math.round(l / oneValue) + (int) minValue;
-
-        //Calculate and adjust the offset
-        float offset = (l % oneValue);
-        if (offset > oneValue / 2) {
-            mHorizontalScrollView.smoothScrollBy(Math.round(oneValue - offset), 0);
-        } else {
-            mHorizontalScrollView.smoothScrollBy(Math.round(-offset), 0);
-        }
-
-        if (value > maxValue) value = (int) maxValue;
-
-        return value;
+        mNotchPath.moveTo(getWidth() / 2 - 30, 0);
+        mNotchPath.lineTo(getWidth() / 2, 40);
+        mNotchPath.lineTo(getWidth() / 2 + 30, 0);
     }
 
     /**
      * Scroll the ruler to the given value.
+     *
+     * @param value Value to select. Value must be between {@link #getMinValue()} and {@link #getMaxValue()}.
+     *              If the value is less than {@link #getMinValue()}, {@link #getMinValue()} will be
+     *              selected.If the value is greater than {@link #getMaxValue()}, {@link #getMaxValue()}
+     *              will be selected.
      */
-    public synchronized void scrollToValue(final float value) {
-        mHorizontalScrollView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                float oneValue = mHorizontalScrollView.getWidth() * viewMultipleSize / (maxValue - minValue);
-                float valueWidth = oneValue * (value - minValue);
+    public void selectValue(final int value) {
+        mHorizontalScrollView.scrollToValue(value,
+                mRulerView.getIndicatorIntervalWidth(),
+                mRulerView.getMinValue());
+    }
 
-                mHorizontalScrollView.smoothScrollBy(Math.round(valueWidth), 0);
-            }
-        }, 400);
+    public int getCurrentValue() {
+        int absoluteValue = mHorizontalScrollView.getScrollX() / mRulerView.getIndicatorIntervalWidth();
+        int value = mRulerView.getMinValue() + absoluteValue;
+
+        if (value > mRulerView.getMaxValue()) {
+            return mRulerView.getMaxValue();
+        } else if (value < mRulerView.getMinValue()) {
+            return mRulerView.getMinValue();
+        } else {
+            return value;
+        }
+    }
+
+    @Override
+    public void onScrollChanged() {
+        if (mListener != null) mListener.onValueChanged(getCurrentValue());
+    }
+
+    @Override
+    public void onScrollStopped() {
+        mHorizontalScrollView.makeOffsetCorrection(mRulerView.getIndicatorIntervalWidth());
+        if (mListener != null) {
+            mListener.onScrollStopped();
+        }
+    }
+
+    //**********************************************************************************//
+    //******************************** GETTERS/SETTERS *********************************//
+    //**********************************************************************************//
+
+    /**
+     * @param notchColorRes Color resource of the notch to display. Default color os {@link Color#WHITE}.
+     * @see #setNotchColor(int)
+     * @see #getNotchColor()
+     */
+    public void setNotchColorRes(@ColorRes final int notchColorRes) {
+        setNotchColor(ContextCompat.getColor(getContext(), notchColorRes));
+    }
+
+    /**
+     * @return Integer color of the notch. Default color os {@link Color#WHITE}.
+     * @see #setNotchColor(int)
+     * @see #setNotchColorRes(int)
+     */
+    @ColorInt
+    public int getNotchColor() {
+        return mNotchColor;
+    }
+
+    /**
+     * @param notchColor Integer color of the notch to display. Default color os {@link Color#WHITE}.
+     * @see #prepareNotchPaint()
+     * @see #getNotchColor()
+     */
+    public void setNotchColor(@ColorInt final int notchColor) {
+        mNotchColor = notchColor;
+        prepareNotchPaint();
+        invalidate();
+    }
+
+    /**
+     * @return Color integer value of the ruler text color.
+     * @see #setTextColor(int)
+     * @see #setTextColorRes(int)
+     */
+    @CheckResult
+    @ColorInt
+    public int getTextColor() {
+        return mRulerView.getTextColor();
+    }
+
+    /**
+     * Set the color of the text to display on the ruler.
+     *
+     * @param color Color integer value.
+     * @see #getTextColor()
+     * @see RulerView#mTextColor
+     */
+    public void setTextColor(@ColorInt final int color) {
+        mRulerView.setTextColor(color);
+    }
+
+    /**
+     * Set the color of the text to display on the ruler.
+     *
+     * @param color Color resource id.
+     * @see RulerView#mTextColor
+     */
+    public void setTextColorRes(@ColorRes final int color) {
+        setTextColor(ContextCompat.getColor(getContext(), color));
+    }
+
+    /**
+     * @return Size of the text of ruler in dp.
+     * @see #setTextSize(int)
+     * @see #setTextSizeRes(int)
+     * @see RulerView#mTextColor
+     */
+    @CheckResult
+    public float getTextSize() {
+        return mRulerView.getTextSize();
+    }
+
+    /**
+     * Set the size of the text to display on the ruler.
+     *
+     * @param dimensionDp Text size dimension in dp.
+     * @see #getTextSize()
+     * @see RulerView#mTextSize
+     */
+    public void setTextSize(final int dimensionDp) {
+        mRulerView.setTextSize(dimensionDp);
+    }
+
+    /**
+     * Set the size of the text to display on the ruler.
+     *
+     * @param dimension Text size dimension resource.
+     * @see #getTextSize()
+     * @see RulerView#mTextSize
+     */
+    public void setTextSizeRes(@DimenRes final int dimension) {
+        setTextSize((int) getContext().getResources().getDimension(dimension));
+    }
+
+    /**
+     * @return Color integer value of the indicator color.
+     * @see #setIndicatorColor(int)
+     * @see #setIndicatorColorRes(int)
+     * @see RulerView#mIndicatorColor
+     */
+    @CheckResult
+    @ColorInt
+    public int getIndicatorColor() {
+        return mRulerView.getIndicatorColor();
+    }
+
+    /**
+     * Set the indicator color.
+     *
+     * @param color Color integer value.
+     * @see #getIndicatorColor()
+     * @see RulerView#mIndicatorColor
+     */
+    public void setIndicatorColor(@ColorInt final int color) {
+        mRulerView.setIndicatorColor(color);
+    }
+
+    /**
+     * Set the indicator color.
+     *
+     * @param color Color resource id.
+     * @see #getIndicatorColor()
+     * @see RulerView#mIndicatorColor
+     */
+    public void setIndicatorColorRes(@ColorRes final int color) {
+        setIndicatorColor(ContextCompat.getColor(getContext(), color));
+    }
+
+    /**
+     * @return Width of the indicator in pixels.
+     * @see #setIndicatorWidth(int)
+     * @see #setIndicatorWidthRes(int)
+     * @see RulerView#mIndicatorWidthPx
+     */
+    @CheckResult
+    public float getIndicatorWidth() {
+        return mRulerView.getIndicatorWidth();
+    }
+
+    /**
+     * Set the width of the indicator line in the ruler.
+     *
+     * @param widthPx Width in pixels.
+     * @see #getIndicatorWidth()
+     * @see RulerView#mIndicatorWidthPx
+     */
+    public void setIndicatorWidth(final int widthPx) {
+        mRulerView.setIndicatorWidth(widthPx);
+    }
+
+    /**
+     * Set the width of the indicator line in the ruler.
+     *
+     * @param width Dimension resource for indicator width.
+     * @see #getIndicatorWidth()
+     * @see RulerView#mIndicatorWidthPx
+     */
+    public void setIndicatorWidthRes(@DimenRes final int width) {
+        setIndicatorWidth(getContext().getResources().getDimensionPixelSize(width));
+    }
+
+    /**
+     * @return Get the minimum value displayed on the ruler.
+     * @see #setMinMaxValue(int, int)
+     * @see RulerView#mMinValue
+     */
+    @CheckResult
+    public int getMinValue() {
+        return mRulerView.getMinValue();
+    }
+
+    /**
+     * @return Get the maximum value displayed on the ruler.
+     * @see #setMinMaxValue(int, int)
+     * @see RulerView#mMaxValue
+     */
+    @CheckResult
+    public int getMaxValue() {
+        return mRulerView.getMaxValue();
+    }
+
+    /**
+     * Set the maximum value to display on the ruler. This will decide the range of values and number
+     * of indicators that ruler will draw.
+     *
+     * @param minValue Value to display at the left end of the ruler. This can be positive, negative
+     *                 or zero. Default minimum value is 0.
+     * @param maxValue Value to display at the right end of the ruler. This can be positive, negative
+     *                 or zero.This value must be greater than min value. Default minimum value is 100.
+     * @see #getMinValue()
+     * @see #getMaxValue()
+     */
+    public void setMinMaxValue(final int minValue, final int maxValue) {
+        mRulerView.setValueRange(minValue, maxValue);
+        invalidate();
+    }
+
+    /**
+     * @return Get distance between two indicator in pixels.
+     * @see #setIndicatorIntervalDistance(int)
+     * @see RulerView#mIndicatorInterval
+     */
+    @CheckResult
+    public int getIndicatorIntervalWidth() {
+        return mRulerView.getIndicatorIntervalWidth();
+    }
+
+    /**
+     * Set the spacing between two vertical lines/indicators. Default value is 14 pixels.
+     *
+     * @param indicatorIntervalPx Distance in pixels. This cannot be negative number or zero.
+     * @see RulerView#mIndicatorInterval
+     */
+    public void setIndicatorIntervalDistance(final int indicatorIntervalPx) {
+        mRulerView.setIndicatorIntervalDistance(indicatorIntervalPx);
+    }
+
+    /**
+     * @return Ratio of long indicator height to the ruler height.
+     * @see #setIndicatorHeight(float, float)
+     * @see RulerView#mLongIndicatorHeightRatio
+     */
+    @CheckResult
+    public float getLongIndicatorHeightRatio() {
+        return mRulerView.getLongIndicatorHeightRatio();
+    }
+
+    /**
+     * @return Ratio of short indicator height to the ruler height.
+     * @see #setIndicatorHeight(float, float)
+     * @see RulerView#mShortIndicatorHeight
+     */
+    @CheckResult
+    public float getShortIndicatorHeightRatio() {
+        return mRulerView.getShortIndicatorHeightRatio();
+    }
+
+    /**
+     * Set the height of the long and short indicators.
+     *
+     * @param longHeightRatio  Ratio of long indicator height to the ruler height. This value must
+     *                         be between 0 to 1. The value should greater than {@link #getShortIndicatorHeightRatio()}.
+     *                         Default value is 0.6 (i.e. 60%). If the value is 0, indicator won't
+     *                         be displayed. If the value is 1, indicator height will be same as the
+     *                         ruler height.
+     * @param shortHeightRatio Ratio of short indicator height to the ruler height. This value must
+     *                         be between 0 to 1. The value should less than {@link #getLongIndicatorHeightRatio()}.
+     *                         Default value is 0.4 (i.e. 40%). If the value is 0, indicator won't
+     *                         be displayed. If the value is 1, indicator height will be same as
+     *                         the ruler height.
+     * @see #getLongIndicatorHeightRatio()
+     * @see #getShortIndicatorHeightRatio()
+     */
+    public void setIndicatorHeight(final float longHeightRatio,
+                                   final float shortHeightRatio) {
+        mRulerView.setIndicatorHeight(longHeightRatio, shortHeightRatio);
+    }
+
+    /**
+     * Set the {@link RulerValuePickerListener} to get callbacks when the value changes.
+     *
+     * @param listener {@link RulerValuePickerListener}
+     */
+    public void setValuePickerListener(@Nullable final RulerValuePickerListener listener) {
+        mListener = listener;
     }
 }

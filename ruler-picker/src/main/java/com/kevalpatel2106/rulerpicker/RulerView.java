@@ -21,12 +21,9 @@ import android.graphics.Paint;
 import android.os.Build;
 import android.support.annotation.CheckResult;
 import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
-import android.support.annotation.DimenRes;
 import android.support.annotation.Dimension;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -42,12 +39,6 @@ import android.view.View;
 
 final class RulerView extends View {
 
-    /**
-     * Width of the view. This view height is measured in {@link #onMeasure(int, int)}.
-     *
-     * @see #onMeasure(int, int)
-     */
-    private int mViewWidth;
     /**
      * Height of the view. This view height is measured in {@link #onMeasure(int, int)}.
      *
@@ -137,7 +128,6 @@ final class RulerView extends View {
      * Integer color of the text, that is displayed on the ruler.
      *
      * @see #setTextColor(int)
-     * @see #setTextColorRes(int)
      * @see #getTextColor()
      */
     @ColorInt
@@ -147,7 +137,6 @@ final class RulerView extends View {
      * Integer color of the indicators.
      *
      * @see #setIndicatorColor(int)
-     * @see #setIndicatorColorRes(int)
      * @see #getIndicatorColor()
      */
     @ColorInt
@@ -157,21 +146,19 @@ final class RulerView extends View {
      * Height of the text, that is displayed on ruler in dp.
      *
      * @see #setTextSize(int)
-     * @see #setTextSizeRes(int)
      * @see #getTextSize()
      */
     @Dimension
     private float mTextSize = 14f;
 
     /**
-     * Width of the indicator in dp.
+     * Width of the indicator in pixels.
      *
      * @see #setIndicatorWidth(int)
-     * @see #setIndicatorWidthRes(int)
      * @see #getIndicatorWidth()
      */
     @Dimension
-    private float mIndicatorWidth = 1f;
+    private float mIndicatorWidthPx = 4f;
 
     public RulerView(@NonNull final Context context) {
         super(context);
@@ -207,7 +194,7 @@ final class RulerView extends View {
     private void refreshPaint() {
         mIndicatorPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mIndicatorPaint.setColor(mIndicatorColor);
-        mIndicatorPaint.setStrokeWidth(RulerViewUtils.sp2px(getContext(), mIndicatorWidth));
+        mIndicatorPaint.setStrokeWidth(mIndicatorWidthPx);
         mIndicatorPaint.setStyle(Paint.Style.STROKE);
 
         mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -235,7 +222,7 @@ final class RulerView extends View {
         drawSmallIndicator(canvas, 0);
 
         //Draw the last indicator.
-        drawSmallIndicator(canvas, mViewWidth);
+        drawSmallIndicator(canvas, getWidth());
         super.onDraw(canvas);
     }
 
@@ -243,11 +230,11 @@ final class RulerView extends View {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         //Measure dimensions
         mViewHeight = MeasureSpec.getSize(heightMeasureSpec);
-        mViewWidth = (mMaxValue - mMinValue - 1) * mIndicatorInterval;
+        int viewWidth = (mMaxValue - mMinValue - 1) * mIndicatorInterval;
 
         updateIndicatorHeight(mLongIndicatorHeightRatio, mShortIndicatorHeightRatio);
 
-        this.setMeasuredDimension(mViewWidth, mViewHeight);
+        this.setMeasuredDimension(viewWidth, mViewHeight);
     }
 
     /**
@@ -308,51 +295,104 @@ final class RulerView extends View {
                 mTextPaint);
     }
 
-    int setProjectedWidth() {
-        return (mMaxValue - mMinValue - 1) * mIndicatorInterval;
-    }
-
-
     /////////////////////// Properties getter/setter ///////////////////////
+
+    /**
+     * @return Color integer value of the ruler text color.
+     * @see #setTextColor(int)
+     */
+    @CheckResult
+    @ColorInt
+    int getTextColor() {
+        return mIndicatorColor;
+    }
 
     /**
      * Set the color of the text to display on the ruler.
      *
-     * @param color Color resource id.
+     * @param color Color integer value.
      */
-    public void setTextColorRes(@ColorRes int color) {
-        mTextColor = ContextCompat.getColor(getContext(), color);
+    void setTextColor(@ColorInt final int color) {
+        mTextColor = color;
         refreshPaint();
+    }
+
+    /**
+     * @return Size of the text of ruler in sp.
+     * @see #setTextSize(int)
+     */
+    @CheckResult
+    float getTextSize() {
+        return mTextSize;
     }
 
     /**
      * Set the size of the text to display on the ruler.
      *
-     * @param dimension Text size dimension resource.
+     * @param textSizeSp Text size dimension in dp.
      */
-    public void setTextSizeRes(@DimenRes int dimension) {
-        mTextSize = getContext().getResources().getDimension(dimension);
+    void setTextSize(final int textSizeSp) {
+        mTextSize = textSizeSp;
         refreshPaint();
+    }
+
+
+    /**
+     * @return Color integer value of the indicator color.
+     * @see #setIndicatorColor(int)
+     */
+    @CheckResult
+    @ColorInt
+    int getIndicatorColor() {
+        return mIndicatorColor;
     }
 
     /**
      * Set the indicator color.
      *
-     * @param color Color resource id.
+     * @param color Color integer value.
      */
-    public void setIndicatorColorRes(@ColorRes int color) {
-        mIndicatorColor = ContextCompat.getColor(getContext(), color);
+    void setIndicatorColor(@ColorInt final int color) {
+        mIndicatorColor = color;
         refreshPaint();
+    }
+
+    /**
+     * @return Width of the indicator in pixels.
+     * @see #setIndicatorWidth(int)
+     */
+    @CheckResult
+    float getIndicatorWidth() {
+        return mIndicatorWidthPx;
     }
 
     /**
      * Set the width of the indicator line in the ruler.
      *
-     * @param width Dimension resource for indicator width.
+     * @param widthPx Width in pixels.
      */
-    public void setIndicatorWidthRes(@DimenRes int width) {
-        mIndicatorWidth = getContext().getResources().getDimension(width);
+    void setIndicatorWidth(final int widthPx) {
+        mIndicatorWidthPx = widthPx;
         refreshPaint();
+    }
+
+
+    /**
+     * @return Get the minimum value displayed on the ruler.
+     * @see #setValueRange(int, int)
+     */
+    @CheckResult
+    int getMinValue() {
+        return mMinValue;
+    }
+
+    /**
+     * @return Get the maximum value displayed on the ruler.
+     * @see #setValueRange(int, int)
+     */
+    @CheckResult
+    int getMaxValue() {
+        return mMaxValue;
     }
 
     /**
@@ -364,25 +404,51 @@ final class RulerView extends View {
      * @param maxValue Value to display at the right end of the ruler. This can be positive, negative
      *                 or zero.This value must be greater than min value. Default minimum value is 100.
      */
-    public void setValueRange(final int minValue, final int maxValue) {
+    void setValueRange(final int minValue, final int maxValue) {
         mMinValue = minValue;
         mMaxValue = maxValue;
         invalidate();
     }
 
     /**
+     * @return Get distance between two indicator in pixels.
+     * @see #setIndicatorIntervalDistance(int)
+     */
+    @CheckResult
+    int getIndicatorIntervalWidth() {
+        return mIndicatorInterval;
+    }
+
+    /**
      * Set the spacing between two vertical lines/indicators. Default value is 14 pixels.
      *
      * @param indicatorIntervalPx Distance in pixels. This cannot be negative number or zero.
-     *
      * @throws IllegalArgumentException if interval is negative or zero.
      */
-    public void setIndicatorIntervalDistance(final int indicatorIntervalPx) {
+    void setIndicatorIntervalDistance(final int indicatorIntervalPx) {
         if (indicatorIntervalPx <= 0)
             throw new IllegalArgumentException("Interval cannot be negative or zero.");
 
         mIndicatorInterval = indicatorIntervalPx;
         invalidate();
+    }
+
+    /**
+     * @return Ratio of long indicator height to the ruler height.
+     * @see #setIndicatorHeight(float, float)
+     */
+    @CheckResult
+    float getLongIndicatorHeightRatio() {
+        return mLongIndicatorHeightRatio;
+    }
+
+    /**
+     * @return Ratio of short indicator height to the ruler height.
+     * @see #setIndicatorHeight(float, float)
+     */
+    @CheckResult
+    float getShortIndicatorHeightRatio() {
+        return mShortIndicatorHeightRatio;
     }
 
     /**
@@ -398,11 +464,10 @@ final class RulerView extends View {
      *                         Default value is 0.4 (i.e. 40%). If the value is 0, indicator won't
      *                         be displayed. If the value is 1, indicator height will be same as
      *                         the ruler height.
-     *
      * @throws IllegalArgumentException if any of the parameter is invalid.
      */
-    public void setIndicatorHeight(final float longHeightRatio,
-                                   final float shortHeightRatio) {
+    void setIndicatorHeight(final float longHeightRatio,
+                            final float shortHeightRatio) {
 
         if (shortHeightRatio < 0 || shortHeightRatio > 1) {
             throw new IllegalArgumentException("Sort indicator height must be between 0 to 1.");
@@ -422,141 +487,5 @@ final class RulerView extends View {
         updateIndicatorHeight(mLongIndicatorHeightRatio, mShortIndicatorHeightRatio);
 
         invalidate();
-    }
-
-    /**
-     * @return Color integer value of the indicator color.
-     *
-     * @see #setIndicatorColor(int)
-     * @see #setIndicatorColorRes(int)
-     */
-    @CheckResult
-    @ColorInt
-    private int getIndicatorColor() {
-        return mIndicatorColor;
-    }
-
-    /**
-     * Set the indicator color.
-     *
-     * @param color Color integer value.
-     */
-    public void setIndicatorColor(@ColorInt int color) {
-        mIndicatorColor = color;
-        refreshPaint();
-    }
-
-    /**
-     * @return Width of the indicator in dp.
-     *
-     * @see #setIndicatorWidth(int)
-     * @see #setIndicatorWidthRes(int)
-     */
-    @CheckResult
-    private float getIndicatorWidth() {
-        return mIndicatorWidth;
-    }
-
-    /**
-     * Set the width of the indicator line in the ruler.
-     *
-     * @param widthDp Width in dp.
-     */
-    public void setIndicatorWidth(@DimenRes int widthDp) {
-        mIndicatorWidth = widthDp;
-        refreshPaint();
-    }
-
-    /**
-     * @return Color integer value of the ruler text color.
-     *
-     * @see #setTextColor(int)
-     * @see #setTextColorRes(int)
-     */
-    @CheckResult
-    @ColorInt
-    private int getTextColor() {
-        return mIndicatorColor;
-    }
-
-    /**
-     * Set the color of the text to display on the ruler.
-     *
-     * @param color Color integer value.
-     */
-    public void setTextColor(@ColorInt int color) {
-        mTextColor = color;
-        refreshPaint();
-    }
-
-    /**
-     * @return Size of the text of ruler in dp.
-     *
-     * @see #setTextSize(int)
-     * @see #setTextSizeRes(int)
-     */
-    @CheckResult
-    private float getTextSize() {
-        return mTextSize;
-    }
-
-    /**
-     * Set the size of the text to display on the ruler.
-     *
-     * @param dimensionDp Text size dimension in dp.
-     */
-    public void setTextSize(@DimenRes int dimensionDp) {
-        mTextSize = dimensionDp;
-        refreshPaint();
-    }
-
-    /**
-     * @return Get distance between two indicator in pixels.
-     *
-     * @see #setIndicatorIntervalDistance(int)
-     */
-    @CheckResult
-    private int getIndicatorIntervalWidth() {
-        return mIndicatorInterval;
-    }
-
-    /**
-     * @return Get the minimum value displayed on the ruler.
-     *
-     * @see #setValueRange(int, int)
-     */
-    @CheckResult
-    private int getMinValue() {
-        return mMinValue;
-    }
-
-    /**
-     * @return Get the maximum value displayed on the ruler.
-     *
-     * @see #setValueRange(int, int)
-     */
-    @CheckResult
-    private int getMaxValue() {
-        return mMaxValue;
-    }
-
-    /**
-     * @return Ratio of long indicator height to the ruler height.
-     *
-     * @see #setIndicatorHeight(float, float)
-     */
-    @CheckResult
-    private float getLongIndicatorHeightRatio() {
-        return mLongIndicatorHeightRatio;
-    }
-
-    /**
-     * @return Ratio of short indicator height to the ruler height.
-     *
-     * @see #setIndicatorHeight(float, float)
-     */
-    @CheckResult
-    private float getShortIndicatorHeightRatio() {
-        return mShortIndicatorHeightRatio;
     }
 }

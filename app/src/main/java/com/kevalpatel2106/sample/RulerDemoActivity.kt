@@ -13,13 +13,13 @@
 
 package com.kevalpatel2106.sample
 
+import android.graphics.Color
 import android.os.Bundle
-import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import android.widget.TextView
-import com.kevalpatel2106.rulerpicker.ObservableHorizontalScrollView
+import android.widget.Toast
 import com.kevalpatel2106.rulerpicker.RulerValuePicker
-import com.kevalpatel2106.rulerpicker.ScrollChangedListener
+import com.kevalpatel2106.rulerpicker.RulerValuePickerListener
 
 /**
  * Created by Keval on 16/12/17.
@@ -35,22 +35,29 @@ class RulerDemoActivity : AppCompatActivity() {
         val valueTv = findViewById<TextView>(R.id.selected_ruler_value_tv)
         val valuePicker = findViewById<RulerValuePicker>(R.id.ruler_view_demo)
 
+        valuePicker.textColor = Color.RED
+        valuePicker.indicatorColor = Color.DKGRAY
+        valuePicker.setIndicatorIntervalDistance(60)
+        valuePicker.notchColor = Color.BLUE
+        valuePicker.setTextSize(16)
+        valuePicker.setIndicatorWidth(4)
         valuePicker.setMinMaxValue(125, 350)
-        valuePicker.setOnScrollChangedListener(object : ScrollChangedListener {
-            override fun onScrollChanged(view: ObservableHorizontalScrollView?, l: Int, t: Int) {
-                valueTv.text = String.format("%d Kgs", valuePicker.getCurrentValue(l))
+        valuePicker.selectValue(130)
 
+        valuePicker.setValuePickerListener(object : RulerValuePickerListener {
+            var selectedValue = 0
+
+            override fun onScrollStopped() {
+                Toast.makeText(this@RulerDemoActivity, "User height is :$selectedValue cms", Toast.LENGTH_LONG).show()
+                valueTv.text = "Value: $selectedValue cms\nScroll stopped."
             }
 
-            override fun onScrollStopped(l: Int, t: Int) {
-                valueTv.text = String.format("%d Kgs\nScroll Stopped.", valuePicker.getValueAndScrollItemToCenter(l))
+            override fun onValueChanged(selectedValue: Int) {
+                this.selectedValue = selectedValue
+                valueTv.text = "Value: $selectedValue cms"
             }
 
         })
-
-        Handler().postDelayed({
-            valuePicker.scrollToValue(200F)
-        }, 1000)
     }
 
 }

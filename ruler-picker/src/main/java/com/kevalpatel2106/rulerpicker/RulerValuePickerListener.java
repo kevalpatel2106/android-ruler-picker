@@ -14,12 +14,13 @@
 package com.kevalpatel2106.rulerpicker;
 
 /**
- * Created by Keval on 29/03/18.
+ * Created by Kevalpatel2106 on 29-Mar-18.
  *
- * @author [kevalpatel2106](https : / / github.com / kevalpatel2106)
+ * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-public interface ScrollChangedListener {
-    void onScrollChanged(ObservableHorizontalScrollView view, int l, int t);
+public interface RulerValuePickerListener {
 
-    void onScrollStopped(int l, int t);
+    void onScrollStopped();
+
+    void onValueChanged(int selectedValue);
 }
