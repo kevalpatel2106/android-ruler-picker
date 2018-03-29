@@ -17,7 +17,7 @@
                 android:layout_height="match_parent"
                 tools:context=".RulerDemoActivity">
 
-    <com.kevalpatel2106.rulerpicker.ScrollingValuePicker
+    <com.kevalpatel2106.rulerpicker.RulerValuePicker
         android:id="@+id/ruler_view_demo"
         android:layout_width="match_parent"
         android:layout_height="100dp"

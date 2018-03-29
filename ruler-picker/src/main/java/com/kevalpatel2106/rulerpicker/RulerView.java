@@ -25,6 +25,7 @@ import android.support.annotation.ColorRes;
 import android.support.annotation.DimenRes;
 import android.support.annotation.Dimension;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
@@ -170,7 +171,7 @@ final class RulerView extends View {
      * @see #getIndicatorWidth()
      */
     @Dimension
-    private float mIndicatorWidth = 4f;
+    private float mIndicatorWidth = 1f;
 
     public RulerView(@NonNull final Context context) {
         super(context);
@@ -178,13 +179,13 @@ final class RulerView extends View {
     }
 
     public RulerView(@NonNull final Context context,
-                     @NonNull final AttributeSet attrs) {
+                     @Nullable final AttributeSet attrs) {
         super(context, attrs);
         refreshPaint();
     }
 
     public RulerView(@NonNull final Context context,
-                     @NonNull final AttributeSet attrs,
+                     @Nullable final AttributeSet attrs,
                      final int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         refreshPaint();
@@ -192,7 +193,7 @@ final class RulerView extends View {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public RulerView(@NonNull final Context context,
-                     @NonNull final AttributeSet attrs,
+                     @Nullable final AttributeSet attrs,
                      int defStyleAttr,
                      int defStyleRes) {
 
@@ -242,12 +243,11 @@ final class RulerView extends View {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         //Measure dimensions
         mViewHeight = MeasureSpec.getSize(heightMeasureSpec);
-        mViewWidth = MeasureSpec.getSize(widthMeasureSpec);
+        mViewWidth = (mMaxValue - mMinValue - 1) * mIndicatorInterval;
 
         updateIndicatorHeight(mLongIndicatorHeightRatio, mShortIndicatorHeightRatio);
 
         this.setMeasuredDimension(mViewWidth, mViewHeight);
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
     /**
@@ -306,6 +306,10 @@ final class RulerView extends View {
                 mIndicatorInterval * value,
                 mLongIndicatorHeight + mTextPaint.getTextSize(),
                 mTextPaint);
+    }
+
+    int setProjectedWidth() {
+        return (mMaxValue - mMinValue - 1) * mIndicatorInterval;
     }
 
 
