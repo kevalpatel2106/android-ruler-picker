@@ -20,6 +20,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.CheckResult;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
@@ -265,12 +267,17 @@ public final class RulerValuePicker extends FrameLayout implements ObservableHor
      *              will be selected.
      */
     public void selectValue(final int value) {
-        post(new Runnable() {
+        mHorizontalScrollView.post(new Runnable() {
             @Override
             public void run() {
-                int valuesToScroll = mRulerView.getMinValue();
-                if (value < mRulerView.getMinValue())
+                int valuesToScroll;
+                if (value < mRulerView.getMinValue()) {
+                    valuesToScroll = 0;
+                } else if (value > mRulerView.getMaxValue()) {
+                    valuesToScroll = mRulerView.getMaxValue() - mRulerView.getMinValue();
+                } else {
                     valuesToScroll = value - mRulerView.getMinValue();
+                }
 
                 mHorizontalScrollView.smoothScrollBy(
                         valuesToScroll * mRulerView.getIndicatorIntervalWidth(), 0);
@@ -314,6 +321,21 @@ public final class RulerValuePicker extends FrameLayout implements ObservableHor
         } else {
             mHorizontalScrollView.scrollBy(indicatorInterval - offsetValue, 0);
         }
+    }
+
+    @Override
+    public Parcelable onSaveInstanceState() {
+        Parcelable superState = super.onSaveInstanceState();
+        SavedState ss = new SavedState(superState);
+        ss.value = getCurrentValue();
+        return ss;
+    }
+
+    @Override
+    public void onRestoreInstanceState(Parcelable state) {
+        SavedState ss = (SavedState) state;
+        super.onRestoreInstanceState(ss.getSuperState());
+        selectValue(ss.value);
     }
 
     //**********************************************************************************//
@@ -586,5 +608,40 @@ public final class RulerValuePicker extends FrameLayout implements ObservableHor
      */
     public void setValuePickerListener(@Nullable final RulerValuePickerListener listener) {
         mListener = listener;
+    }
+
+    /**
+     * User interface state that is stored by RulerView for implementing
+     * {@link View#onSaveInstanceState}.
+     */
+    public static class SavedState extends BaseSavedState {
+
+        public static final Parcelable.Creator<SavedState> CREATOR =
+                new Parcelable.Creator<SavedState>() {
+                    public SavedState createFromParcel(Parcel in) {
+                        return new SavedState(in);
+                    }
+
+                    public SavedState[] newArray(int size) {
+                        return new SavedState[size];
+                    }
+                };
+
+        private int value = 0;
+
+        SavedState(Parcelable superState) {
+            super(superState);
+        }
+
+        private SavedState(Parcel in) {
+            super(in);
+            value = in.readInt();
+        }
+
+        @Override
+        public void writeToParcel(Parcel out, int flags) {
+            super.writeToParcel(out, flags);
+            out.writeInt(value);
+        }
     }
 }
