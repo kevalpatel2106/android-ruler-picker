@@ -55,16 +55,6 @@ public final class RulerValuePicker extends FrameLayout implements ObservableHor
 
     /**
      * Left side empty view to add padding to the ruler.
-     * <p>
-     * <li>Diagram:</li>
-     * Observable ScrollView
-     * |------------------|-----------------------------------------------|------------------|<br/>
-     * |                  |                                               |                  |<br/>
-     * |                  |                                               |                  |<br/>
-     * |  Left Spacer     |                 RulerView                     |  Right Spacer    |<br/>
-     * |                  |                                               |                  |<br/>
-     * |                  |                                               |                  |<br/>
-     * |------------------|-----------------------------------------------|------------------|<br/>
      */
     @SuppressWarnings("NullableProblems")
     @NonNull
@@ -72,16 +62,6 @@ public final class RulerValuePicker extends FrameLayout implements ObservableHor
 
     /**
      * Right side empty view to add padding to the ruler.
-     * <p>
-     * <li>Diagram:</li>
-     * Observable ScrollView
-     * |------------------|-----------------------------------------------|------------------|<br/>
-     * |                  |                                               |                  |<br/>
-     * |                  |                                               |                  |<br/>
-     * |  Left Spacer     |                 RulerView                     |  Right Spacer    |<br/>
-     * |                  |                                               |                  |<br/>
-     * |                  |                                               |                  |<br/>
-     * |------------------|-----------------------------------------------|------------------|<br/>
      */
     @SuppressWarnings("NullableProblems")
     @NonNull
@@ -89,16 +69,6 @@ public final class RulerValuePicker extends FrameLayout implements ObservableHor
 
     /**
      * Ruler view with values.
-     * <p>
-     * <li>Diagram:</li>
-     * Observable ScrollView
-     * |------------------|-----------------------------------------------|------------------|<br/>
-     * |                  |                                               |                  |<br/>
-     * |                  |                                               |                  |<br/>
-     * |  Left Spacer     |                 RulerView                     |  Right Spacer    |<br/>
-     * |                  |                                               |                  |<br/>
-     * |                  |                                               |                  |<br/>
-     * |------------------|-----------------------------------------------|------------------|<br/>
      */
     @SuppressWarnings("NullableProblems")
     @NonNull

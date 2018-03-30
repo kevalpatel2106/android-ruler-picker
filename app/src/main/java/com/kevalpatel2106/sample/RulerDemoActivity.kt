@@ -16,10 +16,9 @@ package com.kevalpatel2106.sample
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.widget.TextView
 import android.widget.Toast
-import com.kevalpatel2106.rulerpicker.RulerValuePicker
 import com.kevalpatel2106.rulerpicker.RulerValuePickerListener
+import kotlinx.android.synthetic.main.activity_ruler_demo.*
 
 /**
  * Created by Keval on 16/12/17.
@@ -32,26 +31,23 @@ class RulerDemoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ruler_demo)
 
-        val valueTv = findViewById<TextView>(R.id.selected_ruler_value_tv)
-        val valuePicker = findViewById<RulerValuePicker>(R.id.ruler_view_demo)
+        ruler_value_picker.textColor = Color.RED
+        ruler_value_picker.indicatorColor = Color.DKGRAY
+        ruler_value_picker.setIndicatorIntervalDistance(60)
+        ruler_value_picker.notchColor = Color.BLUE
+        ruler_value_picker.setTextSize(16)
+        ruler_value_picker.setIndicatorWidth(4)
+        ruler_value_picker.setMinMaxValue(125, 350)
+        ruler_value_picker.selectValue(130)
 
-        valuePicker.textColor = Color.RED
-        valuePicker.indicatorColor = Color.DKGRAY
-        valuePicker.setIndicatorIntervalDistance(60)
-        valuePicker.notchColor = Color.BLUE
-        valuePicker.setTextSize(16)
-        valuePicker.setIndicatorWidth(4)
-        valuePicker.setMinMaxValue(125, 350)
-        valuePicker.selectValue(130)
-
-        valuePicker.setValuePickerListener(object : RulerValuePickerListener {
+        ruler_value_picker.setValuePickerListener(object : RulerValuePickerListener {
             override fun onValueChange(value: Int) {
                 Toast.makeText(this@RulerDemoActivity, "User height is :$value cms", Toast.LENGTH_LONG).show()
-                valueTv.text = "Value: $value cms\nScroll stopped."
+                current_value_tv.text = "$value"
             }
 
             override fun onIntermediateValueChange(selectedValue: Int) {
-                valueTv.text = "Value: $selectedValue cms"
+                current_value_tv.text = "$selectedValue"
             }
 
         })

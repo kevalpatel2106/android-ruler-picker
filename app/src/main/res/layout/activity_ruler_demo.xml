@@ -11,24 +11,271 @@
   ~  the specific language governing permissions and limitations under the License.
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context=".RulerDemoActivity">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RulerDemoActivity">
 
-    <com.kevalpatel2106.rulerpicker.RulerValuePicker
-        android:id="@+id/ruler_view_demo"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="@android:color/holo_green_dark"/>
-
-
-    <TextView
-        android:id="@+id/selected_ruler_value_tv"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ruler_view_demo"
-        android:layout_marginTop="10dp"
-        tools:text="100"/>
-</RelativeLayout>
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp">
+
+        <TextView
+            android:id="@+id/current_value_tv"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="100" />
+
+        <com.kevalpatel2106.rulerpicker.RulerValuePicker
+            android:id="@+id/ruler_value_picker"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@android:color/holo_green_dark"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/current_value_tv" />
+
+
+        <TextView
+            android:id="@+id/notch_settings_heading"
+            style="@style/SettingsHeading"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Notch"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ruler_value_picker" />
+
+        <com.jaredrummler.android.colorpicker.ColorPanelView
+            android:id="@+id/notch_color_panel"
+            style="@style/ColorPanelStyle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/notch_settings_heading" />
+
+        <TextView
+            android:id="@+id/notch_color_heading"
+            style="@style/SettingsName"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/settings_item_height"
+            android:text="Notch color"
+            app:layout_constraintBottom_toBottomOf="@+id/notch_color_panel"
+            app:layout_constraintEnd_toStartOf="@+id/notch_color_panel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/notch_color_panel" />
+
+
+        <TextView
+            android:id="@+id/ruler_text_settings_heading"
+            style="@style/SettingsHeading"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Ruler Text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/notch_color_panel" />
+
+
+        <com.jaredrummler.android.colorpicker.ColorPanelView
+            android:id="@+id/ruler_text_color_panel"
+            style="@style/ColorPanelStyle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ruler_text_settings_heading" />
+
+        <TextView
+            android:id="@+id/ruler_text_color_heading"
+            style="@style/SettingsName"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/settings_item_height"
+            android:text="Ruler text color"
+            app:layout_constraintBottom_toBottomOf="@+id/ruler_text_color_panel"
+            app:layout_constraintEnd_toStartOf="@+id/ruler_text_color_panel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/ruler_text_color_panel" />
+
+        <TextView
+            android:id="@+id/ruler_text_size_heading"
+            style="@style/SettingsName"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/settings_item_height"
+            android:layout_marginTop="@dimen/settings_item_top_margin"
+            android:text="Ruler text size"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ruler_text_color_panel" />
+
+
+        <SeekBar
+            android:id="@+id/ruler_text_size_picker"
+            style="@style/PickerSeekbar"
+            app:layout_constraintBottom_toBottomOf="@+id/ruler_text_size_heading"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ruler_text_size_heading"
+            app:layout_constraintTop_toTopOf="@+id/ruler_text_size_heading" />
+
+        <TextView
+            android:id="@+id/indicator_settings_heading"
+            style="@style/SettingsHeading"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Indicator"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ruler_text_size_heading" />
+
+
+        <com.jaredrummler.android.colorpicker.ColorPanelView
+            android:id="@+id/indicator_color_panel"
+            style="@style/ColorPanelStyle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/indicator_settings_heading" />
+
+        <TextView
+            android:id="@+id/indicator_color_heading"
+            style="@style/SettingsName"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/settings_item_height"
+            android:text="Indicator color"
+            app:layout_constraintBottom_toBottomOf="@+id/indicator_color_panel"
+            app:layout_constraintEnd_toStartOf="@+id/indicator_color_panel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/indicator_color_panel" />
+
+        <TextView
+            android:id="@+id/long_indicator_size_heading"
+            style="@style/SettingsName"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/settings_item_height"
+            android:layout_marginTop="@dimen/settings_item_top_margin"
+            android:text="Long indicator size"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/indicator_color_panel" />
+
+
+        <SeekBar
+            android:id="@+id/long_indicator_size_picker"
+            style="@style/PickerSeekbar"
+            app:layout_constraintBottom_toBottomOf="@+id/long_indicator_size_heading"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/long_indicator_size_heading"
+            app:layout_constraintTop_toTopOf="@+id/long_indicator_size_heading" />
+
+
+        <TextView
+            android:id="@+id/short_indicator_size_heading"
+            style="@style/SettingsName"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/settings_item_height"
+            android:layout_marginTop="@dimen/settings_item_top_margin"
+            android:text="Short indicator size"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/long_indicator_size_heading" />
+
+
+        <SeekBar
+            android:id="@+id/short_indicator_size_picker"
+            style="@style/PickerSeekbar"
+            app:layout_constraintBottom_toBottomOf="@+id/short_indicator_size_heading"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/short_indicator_size_heading"
+            app:layout_constraintTop_toTopOf="@+id/short_indicator_size_heading" />
+
+        <TextView
+            android:id="@+id/indicator_width_heading"
+            style="@style/SettingsName"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/settings_item_height"
+            android:layout_marginTop="@dimen/settings_item_top_margin"
+            android:text="Indicator width"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/short_indicator_size_heading" />
+
+
+        <SeekBar
+            android:id="@+id/indicator_width_picker"
+            style="@style/PickerSeekbar"
+            app:layout_constraintBottom_toBottomOf="@+id/indicator_width_heading"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/indicator_width_heading"
+            app:layout_constraintTop_toTopOf="@+id/indicator_width_heading" />
+
+
+        <TextView
+            android:id="@+id/indicator_interval_heading"
+            style="@style/SettingsName"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/settings_item_height"
+            android:layout_marginTop="@dimen/settings_item_top_margin"
+            android:text="Indicator interval"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/indicator_width_heading" />
+
+
+        <SeekBar
+            android:id="@+id/indicator_interval_picker"
+            style="@style/PickerSeekbar"
+            app:layout_constraintBottom_toBottomOf="@+id/indicator_interval_heading"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/indicator_interval_heading"
+            app:layout_constraintTop_toTopOf="@+id/indicator_interval_heading" />
+
+
+        <TextView
+            android:id="@+id/min_max_value_settings_heading"
+            style="@style/SettingsHeading"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Value range"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/indicator_interval_heading" />
+
+        <TextView
+            android:id="@+id/min_value_heading"
+            style="@style/SettingsName"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_marginTop="@dimen/settings_item_top_margin"
+            android:text="Minimum value"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/min_max_value_settings_heading" />
+
+
+        <EditText
+            android:id="@+id/min_value_et"
+            style="@style/ValuePickerEditText"
+            android:hint="1"
+            app:layout_constraintBottom_toBottomOf="@+id/min_value_heading"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/min_value_heading"
+            app:layout_constraintTop_toTopOf="@+id/min_value_heading" />
+
+        <TextView
+            android:id="@+id/max_value_heading"
+            style="@style/SettingsName"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_marginTop="@dimen/settings_item_top_margin"
+            android:text="Minimum value"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/min_value_heading" />
+
+
+        <EditText
+            android:id="@+id/max_value_et"
+            style="@style/ValuePickerEditText"
+            android:hint="100"
+            app:layout_constraintBottom_toBottomOf="@+id/max_value_heading"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/max_value_heading"
+            app:layout_constraintTop_toTopOf="@+id/max_value_heading" />
+
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>

@@ -11,7 +11,7 @@
   ~  the specific language governing permissions and limitations under the License.
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -19,6 +19,52 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="SettingsHeading">
+        <item name="android:layout_marginEnd" tools:ignore="NewApi">16dp</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:layout_marginStart" tools:targetApi="jelly_bean_mr1">16dp</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Headline</item>
+    </style>
+
+    <style name="SettingsName">
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:minHeight">@dimen/settings_item_height</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_marginStart">16dp</item>
+    </style>
+
+    <style name="PickerSeekbar">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+    </style>
+
+    <style name="ValuePickerEditText">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:inputType">number</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+    </style>
+
+    <style name="ColorPanelStyle">
+        <item name="android:layout_width">@dimen/settings_item_height</item>
+        <item name="android:layout_height">@dimen/settings_item_height</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:layout_marginTop">@dimen/settings_item_top_margin</item>
     </style>
 
 </resources>
