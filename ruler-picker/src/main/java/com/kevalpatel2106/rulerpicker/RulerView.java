@@ -203,6 +203,7 @@ final class RulerView extends View {
         mTextPaint.setTextAlign(Paint.Align.CENTER);
 
         invalidate();
+        requestLayout();
     }
 
     @Override

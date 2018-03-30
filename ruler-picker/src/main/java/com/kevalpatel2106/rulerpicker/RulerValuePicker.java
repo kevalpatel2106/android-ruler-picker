@@ -508,6 +508,7 @@ public final class RulerValuePicker extends FrameLayout implements ObservableHor
     public void setMinMaxValue(final int minValue, final int maxValue) {
         mRulerView.setValueRange(minValue, maxValue);
         invalidate();
+        selectValue(minValue);
     }
 
     /**

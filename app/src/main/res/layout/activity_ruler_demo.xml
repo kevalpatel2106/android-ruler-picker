@@ -12,11 +12,11 @@
   -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".RulerDemoActivity">
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".RulerDemoActivity">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -33,7 +33,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="100" />
+            tools:text="100"/>
 
         <com.kevalpatel2106.rulerpicker.RulerValuePicker
             android:id="@+id/ruler_value_picker"
@@ -42,7 +42,7 @@
             android:background="@android:color/holo_green_dark"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/current_value_tv" />
+            app:layout_constraintTop_toBottomOf="@+id/current_value_tv"/>
 
 
         <TextView
@@ -53,13 +53,13 @@
             android:text="Notch"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ruler_value_picker" />
+            app:layout_constraintTop_toBottomOf="@+id/ruler_value_picker"/>
 
         <com.jaredrummler.android.colorpicker.ColorPanelView
             android:id="@+id/notch_color_panel"
             style="@style/ColorPanelStyle"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/notch_settings_heading" />
+            app:layout_constraintTop_toBottomOf="@+id/notch_settings_heading"/>
 
         <TextView
             android:id="@+id/notch_color_heading"
@@ -70,7 +70,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/notch_color_panel"
             app:layout_constraintEnd_toStartOf="@+id/notch_color_panel"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/notch_color_panel" />
+            app:layout_constraintTop_toTopOf="@+id/notch_color_panel"/>
 
 
         <TextView
@@ -81,14 +81,14 @@
             android:text="Ruler Text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/notch_color_panel" />
+            app:layout_constraintTop_toBottomOf="@+id/notch_color_panel"/>
 
 
         <com.jaredrummler.android.colorpicker.ColorPanelView
             android:id="@+id/ruler_text_color_panel"
             style="@style/ColorPanelStyle"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ruler_text_settings_heading" />
+            app:layout_constraintTop_toBottomOf="@+id/ruler_text_settings_heading"/>
 
         <TextView
             android:id="@+id/ruler_text_color_heading"
@@ -99,7 +99,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/ruler_text_color_panel"
             app:layout_constraintEnd_toStartOf="@+id/ruler_text_color_panel"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/ruler_text_color_panel" />
+            app:layout_constraintTop_toTopOf="@+id/ruler_text_color_panel"/>
 
         <TextView
             android:id="@+id/ruler_text_size_heading"
@@ -109,16 +109,30 @@
             android:layout_marginTop="@dimen/settings_item_top_margin"
             android:text="Ruler text size"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ruler_text_color_panel" />
+            app:layout_constraintTop_toBottomOf="@+id/ruler_text_color_panel"/>
 
 
-        <SeekBar
+        <com.xw.repo.BubbleSeekBar
             android:id="@+id/ruler_text_size_picker"
             style="@style/PickerSeekbar"
+            android:layout_marginTop="8dp"
+            app:bsb_bubble_color="@color/colorPrimaryDark"
+            app:bsb_bubble_text_color="@android:color/white"
+            app:bsb_is_float_type="false"
+            app:bsb_max="@integer/ruler_text_size_max_value"
+            app:bsb_min="@integer/ruler_text_size_min_value"
+            app:bsb_second_track_color="@color/colorAccent"
+            app:bsb_second_track_size="@dimen/seek_bar_second_track_size"
+            app:bsb_section_count="6"
+            app:bsb_seek_by_section="true"
+            app:bsb_seek_step_section="true"
+            app:bsb_show_section_mark="true"
+            app:bsb_track_color="@color/colorPrimary"
+            app:bsb_track_size="@dimen/seek_bar_track_size"
             app:layout_constraintBottom_toBottomOf="@+id/ruler_text_size_heading"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/ruler_text_size_heading"
-            app:layout_constraintTop_toTopOf="@+id/ruler_text_size_heading" />
+            app:layout_constraintTop_toTopOf="@+id/ruler_text_size_heading"/>
 
         <TextView
             android:id="@+id/indicator_settings_heading"
@@ -128,14 +142,14 @@
             android:text="Indicator"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ruler_text_size_heading" />
+            app:layout_constraintTop_toBottomOf="@+id/ruler_text_size_heading"/>
 
 
         <com.jaredrummler.android.colorpicker.ColorPanelView
             android:id="@+id/indicator_color_panel"
             style="@style/ColorPanelStyle"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/indicator_settings_heading" />
+            app:layout_constraintTop_toBottomOf="@+id/indicator_settings_heading"/>
 
         <TextView
             android:id="@+id/indicator_color_heading"
@@ -146,7 +160,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/indicator_color_panel"
             app:layout_constraintEnd_toStartOf="@+id/indicator_color_panel"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/indicator_color_panel" />
+            app:layout_constraintTop_toTopOf="@+id/indicator_color_panel"/>
 
         <TextView
             android:id="@+id/long_indicator_size_heading"
@@ -156,16 +170,30 @@
             android:layout_marginTop="@dimen/settings_item_top_margin"
             android:text="Long indicator size"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/indicator_color_panel" />
+            app:layout_constraintTop_toBottomOf="@+id/indicator_color_panel"/>
 
 
-        <SeekBar
+        <com.xw.repo.BubbleSeekBar
             android:id="@+id/long_indicator_size_picker"
             style="@style/PickerSeekbar"
+            android:layout_marginTop="8dp"
+            app:bsb_bubble_color="@color/colorPrimaryDark"
+            app:bsb_bubble_text_color="@android:color/white"
+            app:bsb_is_float_type="true"
+            app:bsb_max="@fraction/long_height_max_ratio_value"
+            app:bsb_min="@fraction/long_height_min_ratio_value"
+            app:bsb_second_track_color="@color/colorAccent"
+            app:bsb_second_track_size="@dimen/seek_bar_second_track_size"
+            app:bsb_section_count="3"
+            app:bsb_seek_by_section="true"
+            app:bsb_seek_step_section="true"
+            app:bsb_show_section_mark="true"
+            app:bsb_track_color="@color/colorPrimary"
+            app:bsb_track_size="@dimen/seek_bar_track_size"
             app:layout_constraintBottom_toBottomOf="@+id/long_indicator_size_heading"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/long_indicator_size_heading"
-            app:layout_constraintTop_toTopOf="@+id/long_indicator_size_heading" />
+            app:layout_constraintTop_toTopOf="@+id/long_indicator_size_heading"/>
 
 
         <TextView
@@ -176,16 +204,30 @@
             android:layout_marginTop="@dimen/settings_item_top_margin"
             android:text="Short indicator size"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/long_indicator_size_heading" />
+            app:layout_constraintTop_toBottomOf="@+id/long_indicator_size_heading"/>
 
 
-        <SeekBar
+        <com.xw.repo.BubbleSeekBar
             android:id="@+id/short_indicator_size_picker"
             style="@style/PickerSeekbar"
+            android:layout_marginTop="8dp"
+            app:bsb_bubble_color="@color/colorPrimaryDark"
+            app:bsb_bubble_text_color="@android:color/white"
+            app:bsb_is_float_type="true"
+            app:bsb_max="@fraction/short_height_max_ratio_value"
+            app:bsb_min="@fraction/short_height_min_ratio_value"
+            app:bsb_second_track_color="@color/colorAccent"
+            app:bsb_second_track_size="@dimen/seek_bar_second_track_size"
+            app:bsb_section_count="4"
+            app:bsb_seek_by_section="true"
+            app:bsb_seek_step_section="true"
+            app:bsb_show_section_mark="true"
+            app:bsb_track_color="@color/colorPrimary"
+            app:bsb_track_size="@dimen/seek_bar_track_size"
             app:layout_constraintBottom_toBottomOf="@+id/short_indicator_size_heading"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/short_indicator_size_heading"
-            app:layout_constraintTop_toTopOf="@+id/short_indicator_size_heading" />
+            app:layout_constraintTop_toTopOf="@+id/short_indicator_size_heading"/>
 
         <TextView
             android:id="@+id/indicator_width_heading"
@@ -195,16 +237,30 @@
             android:layout_marginTop="@dimen/settings_item_top_margin"
             android:text="Indicator width"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/short_indicator_size_heading" />
+            app:layout_constraintTop_toBottomOf="@+id/short_indicator_size_heading"/>
 
 
-        <SeekBar
+        <com.xw.repo.BubbleSeekBar
             android:id="@+id/indicator_width_picker"
             style="@style/PickerSeekbar"
+            android:layout_marginTop="8dp"
+            app:bsb_bubble_color="@color/colorPrimaryDark"
+            app:bsb_bubble_text_color="@android:color/white"
+            app:bsb_is_float_type="false"
+            app:bsb_max="@integer/interval_width_max_value"
+            app:bsb_min="@integer/interval_width_min_value"
+            app:bsb_second_track_color="@color/colorAccent"
+            app:bsb_second_track_size="@dimen/seek_bar_second_track_size"
+            app:bsb_section_count="4"
+            app:bsb_seek_by_section="true"
+            app:bsb_seek_step_section="true"
+            app:bsb_show_section_mark="true"
+            app:bsb_track_color="@color/colorPrimary"
+            app:bsb_track_size="@dimen/seek_bar_track_size"
             app:layout_constraintBottom_toBottomOf="@+id/indicator_width_heading"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/indicator_width_heading"
-            app:layout_constraintTop_toTopOf="@+id/indicator_width_heading" />
+            app:layout_constraintTop_toTopOf="@+id/indicator_width_heading"/>
 
 
         <TextView
@@ -215,16 +271,30 @@
             android:layout_marginTop="@dimen/settings_item_top_margin"
             android:text="Indicator interval"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/indicator_width_heading" />
+            app:layout_constraintTop_toBottomOf="@+id/indicator_width_heading"/>
 
 
-        <SeekBar
+        <com.xw.repo.BubbleSeekBar
             android:id="@+id/indicator_interval_picker"
             style="@style/PickerSeekbar"
+            android:layout_marginTop="8dp"
+            app:bsb_bubble_color="@color/colorPrimaryDark"
+            app:bsb_bubble_text_color="@android:color/white"
+            app:bsb_is_float_type="false"
+            app:bsb_max="@integer/interval_interval_max_value"
+            app:bsb_min="@integer/interval_interval_min_value"
+            app:bsb_second_track_color="@color/colorAccent"
+            app:bsb_second_track_size="@dimen/seek_bar_second_track_size"
+            app:bsb_section_count="20"
+            app:bsb_seek_by_section="true"
+            app:bsb_seek_step_section="true"
+            app:bsb_show_section_mark="true"
+            app:bsb_track_color="@color/colorPrimary"
+            app:bsb_track_size="@dimen/seek_bar_track_size"
             app:layout_constraintBottom_toBottomOf="@+id/indicator_interval_heading"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/indicator_interval_heading"
-            app:layout_constraintTop_toTopOf="@+id/indicator_interval_heading" />
+            app:layout_constraintTop_toTopOf="@+id/indicator_interval_heading"/>
 
 
         <TextView
@@ -235,7 +305,7 @@
             android:text="Value range"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/indicator_interval_heading" />
+            app:layout_constraintTop_toBottomOf="@+id/indicator_interval_heading"/>
 
         <TextView
             android:id="@+id/min_value_heading"
@@ -245,7 +315,7 @@
             android:layout_marginTop="@dimen/settings_item_top_margin"
             android:text="Minimum value"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/min_max_value_settings_heading" />
+            app:layout_constraintTop_toBottomOf="@+id/min_max_value_settings_heading"/>
 
 
         <EditText
@@ -255,7 +325,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/min_value_heading"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/min_value_heading"
-            app:layout_constraintTop_toTopOf="@+id/min_value_heading" />
+            app:layout_constraintTop_toTopOf="@+id/min_value_heading"/>
 
         <TextView
             android:id="@+id/max_value_heading"
@@ -265,7 +335,7 @@
             android:layout_marginTop="@dimen/settings_item_top_margin"
             android:text="Minimum value"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/min_value_heading" />
+            app:layout_constraintTop_toBottomOf="@+id/min_value_heading"/>
 
 
         <EditText
@@ -275,7 +345,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/max_value_heading"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/max_value_heading"
-            app:layout_constraintTop_toTopOf="@+id/max_value_heading" />
+            app:layout_constraintTop_toTopOf="@+id/max_value_heading"/>
 
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

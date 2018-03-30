@@ -13,4 +13,8 @@
 
 <resources>
     <string name="app_name">Ruler Picker sample</string>
+    <string name="color_picker_title_pick_notch_color">Pick notch color</string>
+    <string name="color_picker_title_pick_text_color">Pick text color</string>
+    <string name="color_picker_title_pick_indicator_color">Pick indicator color</string>
+    <string name="pick_custom_color_btn_title">Custom</string>
 </resources>

@@ -14,4 +14,6 @@
 <resources>
     <dimen name="settings_item_top_margin">8dp</dimen>
     <dimen name="settings_item_height">30dp</dimen>
+    <dimen name="seek_bar_second_track_size">4dp</dimen>
+    <dimen name="seek_bar_track_size">2dp</dimen>
 </resources>
