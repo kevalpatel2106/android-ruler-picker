@@ -15,6 +15,7 @@ package com.kevalpatel2106.rulerpicker;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -162,20 +163,20 @@ final class RulerView extends View {
 
     public RulerView(@NonNull final Context context) {
         super(context);
-        refreshPaint();
+        parseAttr(null);
     }
 
     public RulerView(@NonNull final Context context,
                      @Nullable final AttributeSet attrs) {
         super(context, attrs);
-        refreshPaint();
+        parseAttr(attrs);
     }
 
     public RulerView(@NonNull final Context context,
                      @Nullable final AttributeSet attrs,
                      final int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        refreshPaint();
+        parseAttr(attrs);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -185,6 +186,60 @@ final class RulerView extends View {
                      int defStyleRes) {
 
         super(context, attrs, defStyleAttr, defStyleRes);
+        parseAttr(attrs);
+    }
+
+    private void parseAttr(@Nullable AttributeSet attributeSet) {
+        if (attributeSet != null) {
+            TypedArray a = getContext().getTheme().obtainStyledAttributes(attributeSet,
+                    R.styleable.RulerView,
+                    0,
+                    0);
+
+            try { //Parse params
+                if (a.hasValue(R.styleable.RulerView_ruler_text_color)) {
+                    mTextColor = a.getColor(R.styleable.RulerView_ruler_text_color, Color.WHITE);
+                }
+
+                if (a.hasValue(R.styleable.RulerView_ruler_text_size)) {
+                    mTextSize = a.getDimension(R.styleable.RulerView_ruler_text_size, 14);
+                }
+
+                if (a.hasValue(R.styleable.RulerView_indicator_color)) {
+                    mIndicatorColor = a.getColor(R.styleable.RulerView_indicator_color, Color.WHITE);
+                }
+
+                if (a.hasValue(R.styleable.RulerView_indicator_width)) {
+                    mIndicatorWidthPx = a.getDimensionPixelSize(R.styleable.RulerView_indicator_width,
+                            4);
+                }
+
+                if (a.hasValue(R.styleable.RulerView_indicator_interval)) {
+                    mIndicatorInterval = a.getDimensionPixelSize(R.styleable.RulerView_indicator_interval,
+                            4);
+                }
+
+                if (a.hasValue(R.styleable.RulerView_long_height_height_ratio)) {
+                    mLongIndicatorHeightRatio = a.getFraction(R.styleable.RulerView_long_height_height_ratio,
+                            1, 1, 0.6f);
+                }
+                if (a.hasValue(R.styleable.RulerView_short_height_height_ratio)) {
+                    mShortIndicatorHeightRatio = a.getFraction(R.styleable.RulerView_short_height_height_ratio,
+                            1, 1, 0.4f);
+                }
+                setIndicatorHeight(mLongIndicatorHeightRatio, mShortIndicatorHeightRatio);
+
+                if (a.hasValue(R.styleable.RulerView_min_value)) {
+                    mMinValue = a.getInteger(R.styleable.RulerView_min_value, 0);
+                }
+                if (a.hasValue(R.styleable.RulerView_max_value)) {
+                    mMaxValue = a.getInteger(R.styleable.RulerView_max_value, 100);
+                }
+                setValueRange(mMinValue, mMaxValue);
+            } finally {
+                a.recycle();
+            }
+        }
         refreshPaint();
     }
 

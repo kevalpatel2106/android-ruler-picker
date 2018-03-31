@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2018 Keval Patel
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance wit
+  ~ the License. You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for
+  ~  the specific language governing permissions and limitations under the License.
+  -->
+
+
+<resources>
+    <declare-styleable name="RulerView">
+        <attr name="min_value" format="integer"/>
+        <attr name="max_value" format="integer"/>
+
+        <attr name="long_height_height_ratio" format="fraction"/>
+        <attr name="short_height_height_ratio" format="fraction"/>
+
+        <attr name="ruler_text_color" format="color"/>
+        <attr name="ruler_text_size" format="dimension"/>
+
+        <attr name="indicator_interval" format="dimension"/>
+        <attr name="indicator_color" format="color"/>
+        <attr name="indicator_width" format="dimension"/>
+    </declare-styleable>
+
+    <declare-styleable name="RulerValuePicker">
+        <!-- Color of the top notch -->
+        <attr name="notch_color" format="color"/>
+    </declare-styleable>
+</resources>

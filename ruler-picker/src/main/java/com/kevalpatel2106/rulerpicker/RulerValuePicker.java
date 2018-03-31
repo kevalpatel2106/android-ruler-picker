@@ -15,6 +15,7 @@ package com.kevalpatel2106.rulerpicker;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -103,7 +104,7 @@ public final class RulerValuePicker extends FrameLayout implements ObservableHor
      */
     public RulerValuePicker(@NonNull final Context context) {
         super(context);
-        init();
+        init(null);
     }
 
     /**
@@ -112,7 +113,7 @@ public final class RulerValuePicker extends FrameLayout implements ObservableHor
     public RulerValuePicker(@NonNull final Context context,
                             @Nullable final AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(attrs);
     }
 
     /**
@@ -122,7 +123,7 @@ public final class RulerValuePicker extends FrameLayout implements ObservableHor
                             @Nullable final AttributeSet attrs,
                             final int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        init(attrs);
     }
 
     /**
@@ -134,10 +135,30 @@ public final class RulerValuePicker extends FrameLayout implements ObservableHor
                             final int defStyleAttr,
                             final int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        init();
+        init(attrs);
     }
 
-    private void init() {
+    /**
+     * Initialize the view and parse the {@link AttributeSet}.
+     *
+     * @param attributeSet {@link AttributeSet} to parse or null if no attribute parameters set.
+     */
+    private void init(@Nullable AttributeSet attributeSet) {
+        if (attributeSet != null) {
+            TypedArray a = getContext().getTheme().obtainStyledAttributes(attributeSet,
+                    R.styleable.RulerValuePicker,
+                    0,
+                    0);
+
+            try { //Parse params
+                if (a.hasValue(R.styleable.RulerValuePicker_notch_color)) {
+                    mNotchColor = a.getColor(R.styleable.RulerValuePicker_notch_color, Color.WHITE);
+                }
+            } finally {
+                a.recycle();
+            }
+        }
+
         //Add all the children
         addChildViews();
 
@@ -157,6 +178,19 @@ public final class RulerValuePicker extends FrameLayout implements ObservableHor
         mNotchPaint.setStyle(Paint.Style.FILL_AND_STROKE);
     }
 
+    /**
+     * Programmatically add the children to the view.
+     * <p>
+     * <li>The main view contains the {@link android.widget.HorizontalScrollView}. That allows
+     * {@link RulerView} to scroll horizontally.</li>
+     * <li>{@link #mHorizontalScrollView} contains {@link LinearLayout} that will act as the container
+     * to hold the children inside the horizontal view.</li>
+     * <li>{@link LinearLayout} container will contain three children.
+     * <ul><b>Left spacer:</b> Width of this view will be the half width of the view. This will add staring at the start of the ruler.</ul>
+     * <ul><b>Right spacer:</b> Width of this view will be the half width of the view. This will add ending at the end of the ruler.</ul>
+     * <ul><b>{@link RulerView}:</b> Ruler view will contain the ruler with indicator.</ul>
+     * </li>
+     */
     private void addChildViews() {
         mHorizontalScrollView = new ObservableHorizontalScrollView(getContext(), this);
         mHorizontalScrollView.setHorizontalScrollBarEnabled(false); //Don't display the scrollbar
