@@ -32,7 +32,7 @@ if (project.rootProject.file('local.properties').exists()) {
                     packaging 'aar' //AAR format
 
                     // Add your description here
-                    name 'android-ruler-picker'  //Name of the repo
+                    name 'ruler-picker'  //Name of the repo
                     description = ''
                     url siteUrl
 
@@ -92,8 +92,7 @@ if (project.rootProject.file('local.properties').exists()) {
         pkg {
             repo = "maven"
 
-            // it is the name that appears in bintray when logged
-            name = "android-ruler-picker"    //Name of the artifact [Group Id]:[name]:[version]
+            name = 'ruler-picker'  //Name of the repo
             websiteUrl = siteUrl
             vcsUrl = gitUrl
             licenses = ["Apache-2.0"]
