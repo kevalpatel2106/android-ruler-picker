@@ -144,13 +144,13 @@ final class RulerView extends View {
     private int mIndicatorColor = Color.WHITE;
 
     /**
-     * Height of the text, that is displayed on ruler in dp.
+     * Height of the text, that is displayed on ruler in pixels.
      *
      * @see #setTextSize(int)
      * @see #getTextSize()
      */
     @Dimension
-    private float mTextSize = 14f;
+    private int mTextSize = 36;
 
     /**
      * Width of the indicator in pixels.
@@ -202,7 +202,7 @@ final class RulerView extends View {
                 }
 
                 if (a.hasValue(R.styleable.RulerView_ruler_text_size)) {
-                    mTextSize = a.getDimension(R.styleable.RulerView_ruler_text_size, 14);
+                    mTextSize = a.getDimensionPixelSize(R.styleable.RulerView_ruler_text_size, 14);
                 }
 
                 if (a.hasValue(R.styleable.RulerView_indicator_color)) {
@@ -254,7 +254,7 @@ final class RulerView extends View {
 
         mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mTextPaint.setColor(mTextColor);
-        mTextPaint.setTextSize(RulerViewUtils.sp2px(getContext(), mTextSize));
+        mTextPaint.setTextSize(mTextSize);
         mTextPaint.setTextAlign(Paint.Align.CENTER);
 
         invalidate();
@@ -374,7 +374,7 @@ final class RulerView extends View {
     }
 
     /**
-     * @return Size of the text of ruler in sp.
+     * @return Size of the text of ruler in pixels.
      * @see #setTextSize(int)
      */
     @CheckResult
@@ -388,7 +388,7 @@ final class RulerView extends View {
      * @param textSizeSp Text size dimension in dp.
      */
     void setTextSize(final int textSizeSp) {
-        mTextSize = textSizeSp;
+        mTextSize = RulerViewUtils.sp2px(getContext(), textSizeSp);
         refreshPaint();
     }
 

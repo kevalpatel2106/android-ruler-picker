@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2018 Keval Patel
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance wit
@@ -14,23 +13,52 @@
 
 
 <resources>
+    <attr name="min_value" format="integer" />
+    <attr name="max_value" format="integer" />
+
+    <attr name="long_height_height_ratio" format="fraction" />
+    <attr name="short_height_height_ratio" format="fraction" />
+
+    <attr name="ruler_text_color" format="color" />
+    <attr name="ruler_text_size" format="dimension" />
+
+    <attr name="indicator_interval" format="dimension" />
+    <attr name="indicator_color" format="color" />
+    <attr name="indicator_width" format="dimension" />
+
+    <attr name="notch_color" format="color" />
+
     <declare-styleable name="RulerView">
-        <attr name="min_value" format="integer"/>
-        <attr name="max_value" format="integer"/>
+        <attr name="min_value" />
+        <attr name="max_value" />
 
-        <attr name="long_height_height_ratio" format="fraction"/>
-        <attr name="short_height_height_ratio" format="fraction"/>
+        <attr name="long_height_height_ratio" />
+        <attr name="short_height_height_ratio" />
 
-        <attr name="ruler_text_color" format="color"/>
-        <attr name="ruler_text_size" format="dimension"/>
+        <attr name="ruler_text_color" />
+        <attr name="ruler_text_size" />
 
-        <attr name="indicator_interval" format="dimension"/>
-        <attr name="indicator_color" format="color"/>
-        <attr name="indicator_width" format="dimension"/>
+        <attr name="indicator_interval" />
+        <attr name="indicator_color" />
+        <attr name="indicator_width" />
     </declare-styleable>
 
     <declare-styleable name="RulerValuePicker">
+
+        <attr name="min_value" />
+        <attr name="max_value" />
+
+        <attr name="long_height_height_ratio" />
+        <attr name="short_height_height_ratio" />
+
+        <attr name="ruler_text_color" />
+        <attr name="ruler_text_size" />
+
+        <attr name="indicator_interval" />
+        <attr name="indicator_color" />
+        <attr name="indicator_width" />
+
         <!-- Color of the top notch -->
-        <attr name="notch_color" format="color"/>
+        <attr name="notch_color" />
     </declare-styleable>
 </resources>

@@ -144,6 +144,10 @@ public final class RulerValuePicker extends FrameLayout implements ObservableHor
      * @param attributeSet {@link AttributeSet} to parse or null if no attribute parameters set.
      */
     private void init(@Nullable AttributeSet attributeSet) {
+
+        //Add all the children
+        addChildViews();
+
         if (attributeSet != null) {
             TypedArray a = getContext().getTheme().obtainStyledAttributes(attributeSet,
                     R.styleable.RulerValuePicker,
@@ -154,13 +158,47 @@ public final class RulerValuePicker extends FrameLayout implements ObservableHor
                 if (a.hasValue(R.styleable.RulerValuePicker_notch_color)) {
                     mNotchColor = a.getColor(R.styleable.RulerValuePicker_notch_color, Color.WHITE);
                 }
+
+                if (a.hasValue(R.styleable.RulerValuePicker_ruler_text_color)) {
+                    setTextColor(a.getColor(R.styleable.RulerValuePicker_ruler_text_color, Color.WHITE));
+                }
+
+                if (a.hasValue(R.styleable.RulerValuePicker_ruler_text_size)) {
+                    setTextSize((int) a.getDimension(R.styleable.RulerValuePicker_ruler_text_size, 14));
+                }
+
+                if (a.hasValue(R.styleable.RulerValuePicker_indicator_color)) {
+                    setIndicatorColor(a.getColor(R.styleable.RulerValuePicker_indicator_color, Color.WHITE));
+                }
+
+                if (a.hasValue(R.styleable.RulerValuePicker_indicator_width)) {
+                    setIndicatorWidth(a.getDimensionPixelSize(R.styleable.RulerValuePicker_indicator_width,
+                            4));
+                }
+
+                if (a.hasValue(R.styleable.RulerValuePicker_indicator_interval)) {
+                    setIndicatorIntervalDistance(a.getDimensionPixelSize(R.styleable.RulerValuePicker_indicator_interval,
+                            4));
+                }
+
+                if (a.hasValue(R.styleable.RulerValuePicker_long_height_height_ratio)
+                        || a.hasValue(R.styleable.RulerValuePicker_short_height_height_ratio)) {
+
+                    setIndicatorHeight(a.getFraction(R.styleable.RulerValuePicker_long_height_height_ratio,
+                            1, 1, 0.6f),
+                            a.getFraction(R.styleable.RulerValuePicker_short_height_height_ratio,
+                                    1, 1, 0.4f));
+                }
+
+                if (a.hasValue(R.styleable.RulerValuePicker_min_value) ||
+                        a.hasValue(R.styleable.RulerValuePicker_max_value)) {
+                    setMinMaxValue(a.getInteger(R.styleable.RulerValuePicker_min_value, 0),
+                            a.getInteger(R.styleable.RulerValuePicker_max_value, 100));
+                }
             } finally {
                 a.recycle();
             }
         }
-
-        //Add all the children
-        addChildViews();
 
         //Prepare the notch color.
         mNotchPaint = new Paint();
@@ -271,7 +309,7 @@ public final class RulerValuePicker extends FrameLayout implements ObservableHor
      *              will be selected.
      */
     public void selectValue(final int value) {
-        mHorizontalScrollView.post(new Runnable() {
+        mHorizontalScrollView.postDelayed(new Runnable() {
             @Override
             public void run() {
                 int valuesToScroll;
@@ -286,7 +324,7 @@ public final class RulerValuePicker extends FrameLayout implements ObservableHor
                 mHorizontalScrollView.smoothScrollBy(
                         valuesToScroll * mRulerView.getIndicatorIntervalWidth(), 0);
             }
-        });
+        }, 400);
     }
 
     /**

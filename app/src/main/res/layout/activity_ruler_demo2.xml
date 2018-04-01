@@ -111,16 +111,34 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profile_name_input_layout" />
 
+        <TextView
+            android:id="@+id/height_value_tv"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="@android:color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/height_picker_heading"
+            tools:text="165 cms" />
+
         <com.kevalpatel2106.rulerpicker.RulerValuePicker
             android:id="@+id/height_ruler_picker"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:layout_marginTop="8dp"
-            android:background="@android:color/holo_blue_dark"
-            android:elevation="4dp"
+            android:layout_marginTop="4dp"
+            android:background="@color/colorAccent"
+            app:indicator_color="@android:color/darker_gray"
+            app:indicator_interval="8dp"
+            app:indicator_width="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/height_picker_heading"
+            app:layout_constraintTop_toBottomOf="@+id/height_value_tv"
+            app:max_value="250"
+            app:min_value="100"
+            app:notch_color="@color/colorPrimaryDark"
+            app:ruler_text_size="4sp"
             tools:targetApi="lollipop" />
 
         <android.support.v7.widget.AppCompatTextView
@@ -139,18 +157,83 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/height_ruler_picker" />
 
+        <TextView
+            android:id="@+id/weight_value_tv"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="@android:color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/weight_picker_heading"
+            tools:text="55 kgs" />
+
         <com.kevalpatel2106.rulerpicker.RulerValuePicker
             android:id="@+id/weight_ruler_picker"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
             android:background="@android:color/holo_orange_dark"
             android:elevation="4dp"
+            app:indicator_color="@android:color/white"
+            app:indicator_interval="14dp"
+            app:indicator_width="2dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/weight_picker_heading"
+            app:layout_constraintTop_toBottomOf="@+id/weight_value_tv"
+            app:max_value="120"
+            app:min_value="35"
+            app:notch_color="@android:color/white"
+            app:ruler_text_size="6sp"
             tools:targetApi="lollipop" />
 
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Gender"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@android:color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/weight_ruler_picker" />
 
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Male"
+                android:textColor="@android:color/white" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:checked="true"
+                android:text="Female"
+                android:textColor="@android:color/white" />
+        </RadioGroup>
     </android.support.constraint.ConstraintLayout>
 </ScrollView>
