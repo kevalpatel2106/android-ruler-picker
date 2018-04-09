@@ -1,4 +1,4 @@
-** Describe your issue/feature request here Make sure you read [ISSUE_GUIDE](https://github.com/kevalpatel2106/android-ruler-picker/blob/master/.github/ISSUE_GUIDE.md). **
+** Describe your issue/feature request here Make sure you read [ISSUE_GUIDE](/.github/ISSUE_GUIDE.md). **
 -------------------------------------
 
 **StandUp Version:** <!-- e.g. Version 1.23 -->

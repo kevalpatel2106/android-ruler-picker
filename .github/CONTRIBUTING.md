@@ -1,7 +1,7 @@
 # Contributing Guidelines
 
 - If you have an idea/suggestion, bug report or anything you think might be of interest - don't be shy, 
-[create a ticket](https://github.com/kevalpatel2106/Stand-Up/issues/new). No idea is bad, no opinion is wrong. 
+[create a ticket](https://github.com/kevalpatel2106/android-ruler-picker/issues/new). No idea is bad, no opinion is wrong. 
 - If you see a typo, misbehaving rule or something simply out of place - send a PR. I try to merge fixes within 24h.
 
 ## Simple 3 step to contribute into this repo:
