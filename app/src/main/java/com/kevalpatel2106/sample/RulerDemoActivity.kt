@@ -17,6 +17,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.MenuItem
 import android.widget.Toast
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
 import com.kevalpatel2106.rulerpicker.RulerValuePickerListener
@@ -223,6 +224,11 @@ class RulerDemoActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        finish()
+        return super.onOptionsItemSelected(item)
     }
 
 }
