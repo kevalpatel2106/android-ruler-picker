@@ -13,7 +13,7 @@
 - ### Gradle dependency: 
     - Add below dependency into your build.gradle file.
         ```groovy
-        compile 'com.kevalpatel2106:ruler-picker:1.0'
+        compile 'com.kevalpatel2106:ruler-picker:1.1'
         ```
     - For other build systems see [Import.md](/.github/IMPORT.md).
 
