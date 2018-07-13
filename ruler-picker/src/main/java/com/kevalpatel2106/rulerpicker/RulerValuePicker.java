@@ -321,7 +321,7 @@ public final class RulerValuePicker extends FrameLayout implements ObservableHor
                     valuesToScroll = value - mRulerView.getMinValue();
                 }
 
-                mHorizontalScrollView.smoothScrollBy(
+                mHorizontalScrollView.smoothScrollTo(
                         valuesToScroll * mRulerView.getIndicatorIntervalWidth(), 0);
             }
         }, 400);
